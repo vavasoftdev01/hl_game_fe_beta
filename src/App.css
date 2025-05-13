@@ -1,0 +1,3 @@
+.chart-container {
+  @apply w-full h-[400px];
+}
