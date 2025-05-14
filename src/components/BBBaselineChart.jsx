@@ -1,15 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
-import { createChart, AreaSeries, LineType, LastPriceAnimationMode, LineStyle, createTextWatermark, createSeriesMarkers } from 'lightweight-charts';
+import { createChart, BaselineSeries, LineType, LastPriceAnimationMode, LineStyle, createTextWatermark, createSeriesMarkers } from 'lightweight-charts';
 import io from 'socket.io-client';
 
 // Log the version of lightweight-charts to verify compatibility
 import pkg from 'lightweight-charts/package.json';
 console.log('Lightweight Charts version:', pkg.version);
 
-const BaselineChart = ({ height = 400, className = '' }) => {
+const BBBaselineChart = ({ height = 400, className = '' }) => {
   const chartRef = useRef(null);
   const chartInstance = useRef(null);
-  const areaSeries = useRef(null);
+  const baselineSeries = useRef(null); // Renamed from areaSeries to baselineSeries
   const isInitialized = useRef(false);
   const [chartData, setChartData] = useState([]);
   const [markers, setMarkers] = useState([]); // State to store markers
@@ -20,10 +20,10 @@ const BaselineChart = ({ height = 400, className = '' }) => {
   const textWatermark = useRef(null); // Ref to store watermark for reference
 
   const TOTAL_TIME_SPAN_S = 1; // 1 second historical range
-  const SENSITIVITY = '.100'; // Zoomed-in sensitivity
-  const TICK_INTERVAL_MS = 500; // 600ms throttle for updates
-  const VISIBLE_TICKS = 50; // Number of visible ticks
-  const VISIBLE_DATA = -100; // Last 30 points
+  const SENSITIVITY = 100; // Zoomed-in sensitivity
+  const TICK_INTERVAL_MS = 60; // 600ms throttle for updates
+  const VISIBLE_TICKS = 110; // Number of visible ticks
+  const VISIBLE_DATA = -30; // Last 100 points
 
   const backendApiUrl = 'http://localhost:3000';
   const websocketUrl = 'http://localhost:8080/hl_price';
@@ -35,45 +35,45 @@ const BaselineChart = ({ height = 400, className = '' }) => {
   };
 
   const addMarker = () => {
-    if (areaSeries.current && chartInstance.current && chartData.length > 0) {
+    if (baselineSeries.current && chartInstance.current && chartData.length > 0) {
       const latestData = chartData[chartData.length - 1];
       const newMarker = {
         time: latestData.time, // Set marker time to the latest tick's timestamp
         position: 'inBar', // Centered position within the bar
         color: '#fff',
         shape: 'square',
-        text: `Price: ${latestData.value.toFixed(2)} 🏳️🏳️🏳️ `,
+        text: `Price: ${latestData.value.toFixed(2)} 🏳️`,
       };
       // Append the new marker to the existing ones
       setMarkers((prevMarkers) => {
         const updatedMarkers = [...prevMarkers, newMarker];
         return updatedMarkers;
       });
-      console.log('Marker added at latest tick time:', latestData.time, 'with price:', latestData.value);
+      //console.log('Marker added at latest tick time:', latestData.time, 'with price:', latestData.value);
     } else {
-      console.warn('Cannot add marker: No series, chart instance, or data available');
+      //console.warn('Cannot add marker: No series, chart instance, or data available');
     }
   };
 
   const clearMarkers = () => {
-    if (areaSeries.current) {
+    if (baselineSeries.current) {
       setMarkers([]); // Reset markers state to empty array
-      console.log('Markers cleared from state');
+      //console.log('Markers cleared from state');
     } else {
-      console.warn('Cannot clear markers: No series available');
+      //console.warn('Cannot clear markers: No series available');
     }
   };
 
   // Effect to sync markers with the chart
   useEffect(() => {
-    if (areaSeries.current && markers.length === 0 && chartInstance.current) {
-      createSeriesMarkers(areaSeries.current, []); // Clear markers when state is empty
-      console.log('Markers cleared from chart');
-    } else if (areaSeries.current && markers.length > 0 && chartInstance.current) {
-      createSeriesMarkers(areaSeries.current, markers); // Update chart with current markers
-      console.log('Markers updated on chart:', markers.length);
+    if (baselineSeries.current && markers.length === 0 && chartInstance.current) {
+      createSeriesMarkers(baselineSeries.current, []); // Clear markers when state is empty
+      //console.log('Markers cleared from chart');
+    } else if (baselineSeries.current && markers.length > 0 && chartInstance.current) {
+      createSeriesMarkers(baselineSeries.current, markers); // Update chart with current markers
+      //console.log('Markers updated on chart:', markers.length);
     }
-  }, [markers, areaSeries.current, chartInstance.current]);
+  }, [markers, baselineSeries.current, chartInstance.current]);
 
   useEffect(() => {
     if (chartRef.current && !isInitialized.current && chartRef.current.offsetWidth > 0) {
@@ -82,35 +82,38 @@ const BaselineChart = ({ height = 400, className = '' }) => {
           width: chartRef.current.offsetWidth,
           height,
           layout: { background: { color: '#25293a' }, textColor: '#e0e0e0' },
-          grid: { vertLines: { color: '#2d324d' }, horzLines: { color: '#2d324d' } },
+          grid: { vertLines: { color: '#25293a' }, horzLines: { color: '#2d324d' } },
           timeScale: {
             timeVisible: true,
             rightOffset: 20,
-            barSpacing: 10,
+            barSpacing: 1,
             fixLeftEdge: true,
-            autoScale: true,
+            autoScale: false,
+
           },
           priceScale: {
             autoScale: true,
             position: 'right',
-            barSpacing: 20
           },
           handleScroll: true,
           handleScale: true,
         });
 
         const seriesOptions = {
-          topLineColor: '#ce03fc',
-          topFillColor1: 'rgba(206, 3, 252, 0.8)',
-          topFillColor2: 'rgba(206, 3, 252, 0.2)',
-          bottomLineColor: 'rgba(206, 3, 252, 0.1)',
-          bottomFillColor1: 'rgba(206, 3, 252, 0.05)',
-          bottomFillColor2: 'rgba(206, 3, 252, 0)',
-          lineWidth: 2,
+          baseValue: { type: 'price', price: 10 }, // Set baseline at 0 (customizable)
+          topLineColor: 'rgba(250, 245, 248, 0.6)', // white line color
+          topFillColor1: 'rgba(5, 247, 45, 0.8)', // Top fill gradient
+          topFillColor2: 'rgba(247, 5, 126, 0.8)',
+          bottomLineColor: 'rgba(247, 5, 126, 0.1)',
+          bottomFillColor1: 'rgba(247, 5, 126, 0.05)',
+          bottomFillColor2: 'rgba(247, 5, 126, 0)',
+          lineWidth: 1.5,
           lineType: LineType.Curved,
           lastPriceAnimation: LastPriceAnimationMode.OnDataUpdate,
           lineStyle: LineStyle.Solid,
         };
+
+       
 
         // Add watermark to the first pane if it exists
         if (chartInstance.current.panes().length > 0) {
@@ -120,41 +123,42 @@ const BaselineChart = ({ height = 400, className = '' }) => {
             lines: [
               {
                 text: 'KBCGAME - BTCUSDT',
-                color: 'rgba(245, 241, 243, 0.1)',
-                fontSize: 35,
+                color: 'rgba(245, 241, 243, 0.3)',
+                fontSize: 25,
               },
             ],
           });
-          console.info('Watermark added:', textWatermark.current);
+          //console.info('Watermark added:', textWatermark.current);
         } else {
-          console.warn('No panes available for watermark');
+          //console.warn('No panes available for watermark');
         }
 
-        areaSeries.current = chartInstance.current.addSeries(AreaSeries, seriesOptions);
-        console.log('Area series added with options:', seriesOptions);
+        baselineSeries.current = chartInstance.current.addSeries(BaselineSeries, seriesOptions); // Changed to BaselineSeries
+        //console.log('Baseline series added with options:', seriesOptions);
 
         // Force a redraw to ensure watermark renders
         chartInstance.current.resize(chartRef.current.offsetWidth, height);
         chartInstance.current.timeScale().fitContent();
 
+        
+
         window.addEventListener('resize', resize);
 
         isInitialized.current = true;
-        console.log('Chart initialization complete');
+        //console.log('Chart initialization complete');
       } catch (error) {
-        console.error('Chart initialization error:', error);
+        //console.error('Chart initialization error:', error);
       }
 
       return () => {
-        console.log('Cleaning up chart...');
+        //console.log('Cleaning up chart...');
         window.removeEventListener('resize', resize);
         if (chartInstance.current) {
-          // chart.remove() should clean up the watermark automatically
           chartInstance.current.remove();
-          console.log('Chart and watermark cleaned up');
+          //console.log('Chart and watermark cleaned up');
           chartInstance.current = null;
-          areaSeries.current = null;
-          textWatermark.current = null; // Clear reference
+          baselineSeries.current = null;
+          textWatermark.current = null;
           isInitialized.current = false;
         }
       };
@@ -162,12 +166,12 @@ const BaselineChart = ({ height = 400, className = '' }) => {
   }, [height]);
 
   useEffect(() => {
-    if (!isInitialized.current || !chartInstance.current || !areaSeries.current) {
-      console.log('Waiting for chart to be initialized...', {
-        isInitialized: isInitialized.current,
-        chartInstance: !!chartInstance.current,
-        areaSeries: !!areaSeries.current,
-      });
+    if (!isInitialized.current || !chartInstance.current || !baselineSeries.current) {
+      // console.log('Waiting for chart to be initialized...', {
+      //   isInitialized: isInitialized.current,
+      //   chartInstance: !!chartInstance.current,
+      //   baselineSeries: !!baselineSeries.current,
+      // });
       return;
     }
 
@@ -178,7 +182,7 @@ const BaselineChart = ({ height = 400, className = '' }) => {
           const endTime = currentTimeMs - 1;
           const startTime = endTime - (TOTAL_TIME_SPAN_S * 1000);
 
-          console.log(`Fetching historical data: start=${startTime}, end=${endTime}`);
+          //console.log(`Fetching historical data: start=${startTime}, end=${endTime}`);
 
           const response = await fetch(
             `${backendApiUrl}/binance/historical?symbol=BTCUSDT&startTime=${startTime}&endTime=${endTime}&limit=100`
@@ -186,7 +190,7 @@ const BaselineChart = ({ height = 400, className = '' }) => {
           if (!response.ok) throw new Error('Failed to fetch historical data');
           const candles = await response.json();
 
-          console.log('Historical data:', candles);
+          //console.log('Historical data:', candles);
 
           const mappedData = candles.map(candle => ({
             time: candle.close_time / 1000,
@@ -202,14 +206,13 @@ const BaselineChart = ({ height = 400, className = '' }) => {
         let initialData = historicalData.length > 0 ? historicalData : [{ time: Math.floor(Date.now() / 1000) - 100, value: 96741 * SENSITIVITY }];
         initialData = initialData.filter(d => typeof d.time === 'number' && !isNaN(d.time) && typeof d.value === 'number' && !isNaN(d.value));
         if (initialData.length === 0) {
-          console.warn('No valid historical data, using fallback');
-          //initialData = [{ time: Math.floor(Date.now() / 1000) - 100, value: 96741 * SENSITIVITY }];
+          //console.warn('No valid historical data, using fallback');
         }
 
         // Ensure initial data is sorted and unique
         initialData = [...new Map(initialData.map(item => [item.time, item])).values()].sort((a, b) => a.time - b.time);
 
-        console.log('Setting initial data:', initialData);
+        //console.log('Setting initial data:', initialData);
         setChartData(initialData);
 
         const validInitialData = initialData.filter(
@@ -217,8 +220,8 @@ const BaselineChart = ({ height = 400, className = '' }) => {
         );
 
         if (validInitialData.length > 0) {
-          console.log('Applying initial chart data:', validInitialData);
-          areaSeries.current.setData(validInitialData);
+          //console.log('Applying initial chart data:', validInitialData);
+          baselineSeries.current.setData(validInitialData); // Updated for BaselineSeries
           const totalTimeSpan = Math.max(...validInitialData.map(d => d.time)) - Math.min(...validInitialData.map(d => d.time)) || TOTAL_TIME_SPAN_S;
           const tickInterval = totalTimeSpan / VISIBLE_TICKS;
           chartInstance.current.timeScale().setVisibleRange({
@@ -235,16 +238,16 @@ const BaselineChart = ({ height = 400, className = '' }) => {
     };
 
     initializeChart();
-  }, [isInitialized, chartInstance, areaSeries]);
+  }, [isInitialized, chartInstance, baselineSeries]);
 
   useEffect(() => {
-    if (!isInitialized.current || !chartInstance.current || !areaSeries.current || chartData.length === 0) {
-      console.log('Waiting for data to be applied...', {
-        isInitialized: isInitialized.current,
-        chartInstance: !!chartInstance.current,
-        areaSeries: !!areaSeries.current,
-        chartDataLength: chartData.length,
-      });
+    if (!isInitialized.current || !chartInstance.current || !baselineSeries.current || chartData.length === 0) {
+      // console.log('Waiting for data to be applied...', {
+      //   isInitialized: isInitialized.current,
+      //   chartInstance: !!chartInstance.current,
+      //   baselineSeries: !!baselineSeries.current,
+      //   chartDataLength: chartData.length,
+      // });
       return;
     }
 
@@ -256,15 +259,15 @@ const BaselineChart = ({ height = 400, className = '' }) => {
       );
 
       if (validChartData.length === 0) {
-        console.warn('No valid chart data to set');
+        //console.warn('No valid chart data to set');
         return;
       }
 
       // Ensure data is sorted and unique
       const uniqueValidData = [...new Map(validChartData.map(item => [item.time, item])).values()].sort((a, b) => a.time - b.time);
 
-      console.log('Applying chart data:', uniqueValidData);
-      areaSeries.current.setData(uniqueValidData);
+      //console.log('Applying chart data:', uniqueValidData);
+      baselineSeries.current.setData(uniqueValidData); // Updated for BaselineSeries
       const totalTimeSpan = Math.max(...uniqueValidData.map(d => d.time)) - Math.min(...uniqueValidData.map(d => d.time)) || TOTAL_TIME_SPAN_S;
       const tickInterval = totalTimeSpan / VISIBLE_TICKS;
       chartInstance.current.timeScale().setVisibleRange({
@@ -273,12 +276,12 @@ const BaselineChart = ({ height = 400, className = '' }) => {
       });
       renderSync.current += 1;
     } catch (error) {
-      console.error('Error applying chart data:', error);
+      //console.error('Error applying chart data:', error);
     }
-  }, [chartData, isInitialized, chartInstance, areaSeries]);
+  }, [chartData, isInitialized, chartInstance, baselineSeries]);
 
   useEffect(() => {
-    if (!isInitialized.current || !chartInstance.current || !areaSeries.current) return;
+    if (!isInitialized.current || !chartInstance.current || !baselineSeries.current) return;
 
     const setupWebSocket = () => {
       socketRef.current = io(websocketUrl, {
@@ -288,14 +291,14 @@ const BaselineChart = ({ height = 400, className = '' }) => {
       });
 
       socketRef.current.on('connect', () => {
-        console.log('WebSocket connected successfully');
+        //console.log('WebSocket connected successfully');
       });
 
       socketRef.current.on('tradeUpdate', (data) => {
-        console.log('Received tradeUpdate from WebSocket:', data);
+        //console.log('Received tradeUpdate from WebSocket:', data);
 
         if (!data || typeof data.value !== 'number') {
-          console.error('Invalid trade update:', data);
+          //console.error('Invalid trade update:', data);
           return;
         }
 
@@ -313,7 +316,7 @@ const BaselineChart = ({ height = 400, className = '' }) => {
 
         const now = Date.now();
         if (now - lastUpdateTime.current < TICK_INTERVAL_MS) {
-          console.log('Throttling update, waiting for next interval...', { elapsed: now - lastUpdateTime.current });
+          //console.log('Throttling update, waiting for next interval...', { elapsed: now - lastUpdateTime.current });
           return;
         }
 
@@ -333,10 +336,10 @@ const BaselineChart = ({ height = 400, className = '' }) => {
 
           const uniqueLimitedData = [...new Map(limitedData.map(item => [item.time, item])).values()].sort((a, b) => a.time - b.time);
 
-          console.log('Applying new chart data:', uniqueLimitedData);
-          if (areaSeries.current && chartInstance.current && renderSync.current > 0) {
+          //console.log('Applying new chart data:', uniqueLimitedData);
+          if (baselineSeries.current && chartInstance.current && renderSync.current > 0) {
             try {
-              areaSeries.current.setData(uniqueLimitedData);
+              baselineSeries.current.setData(uniqueLimitedData); // Updated for BaselineSeries
               const totalTimeSpan = Math.max(...uniqueLimitedData.map(d => d.time)) - Math.min(...uniqueLimitedData.map(d => d.time)) || TOTAL_TIME_SPAN_S;
               const tickInterval = totalTimeSpan / VISIBLE_TICKS;
               chartInstance.current.timeScale().setVisibleRange({
@@ -381,47 +384,47 @@ const BaselineChart = ({ height = 400, className = '' }) => {
 
     const cleanup = setupWebSocket();
     return cleanup;
-  }, [isInitialized, chartInstance, areaSeries, websocketUrl]);
+  }, [isInitialized, chartInstance, baselineSeries, websocketUrl]);
 
   return (
     <div style={{ position: 'relative' }}>
       <div ref={chartRef} className={className} />
       <div className='flex flex-row gap-2'>
-      <button
-        onClick={addMarker}
-        style={{
-          top: '10px',
-          left: '10px',
-          padding: '5px 10px',
-          backgroundColor: '#59ad05',
-          color: '#fff',
-          border: 'none',
-          borderRadius: '3px',
-          cursor: 'pointer',
-          zIndex: 10
-        }}
-      >
-        Add Marker
-      </button>
-      <button
-        onClick={clearMarkers}
-        style={{
-          top: '10px',
-          left: '10px',
-          padding: '5px 10px',
-          backgroundColor: '#ce03fc',
-          color: '#fff',
-          border: 'none',
-          borderRadius: '3px',
-          cursor: 'pointer',
-          zIndex: 10
-        }}
-      >
-        Clear
-      </button>
+        <button
+          onClick={addMarker}
+          style={{
+            top: '10px',
+            left: '10px',
+            padding: '5px 10px',
+            backgroundColor: '#59ad05',
+            color: '#fff',
+            border: 'none',
+            borderRadius: '3px',
+            cursor: 'pointer',
+            zIndex: 10,
+          }}
+        >
+          Add Marker
+        </button>
+        <button
+          onClick={clearMarkers}
+          style={{
+            top: '10px',
+            left: '10px',
+            padding: '5px 10px',
+            backgroundColor: '#ce03fc',
+            color: '#fff',
+            border: 'none',
+            borderRadius: '3px',
+            cursor: 'pointer',
+            zIndex: 10,
+          }}
+        >
+          Clear
+        </button>
       </div>
     </div>
   );
 };
 
-export default BaselineChart;
+export default BBBaselineChart;
