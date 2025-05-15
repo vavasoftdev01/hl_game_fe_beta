@@ -1,10 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { createChart, BaselineSeries, LineType, LastPriceAnimationMode, LineStyle, createTextWatermark, createSeriesMarkers } from 'lightweight-charts';
+import { createChart, BaselineSeries, LineType, LastPriceAnimationMode, LineStyle, createTextWatermark, createSeriesMarkers, PriceScaleMode, IChartBase, applyOptions, HistogramSeries } from 'lightweight-charts';
 import io from 'socket.io-client';
-
-// Log the version of lightweight-charts to verify compatibility
-import pkg from 'lightweight-charts/package.json';
-console.log('Lightweight Charts version:', pkg.version);
 
 const BBBaselineChart = ({ height = 400, className = '' }) => {
   const chartRef = useRef(null);
@@ -18,10 +14,11 @@ const BBBaselineChart = ({ height = 400, className = '' }) => {
   const lastUpdateTime = useRef(0);
   const lastTimestamp = useRef(0);
   const textWatermark = useRef(null); // Ref to store watermark for reference
+  const volumeSeries = useRef(null);
 
   const TOTAL_TIME_SPAN_S = 1; // 1 second historical range
-  const SENSITIVITY = 100; // Zoomed-in sensitivity
-  const TICK_INTERVAL_MS = 60; // 600ms throttle for updates
+  const SENSITIVITY = 1; // Zoomed-in sensitivity
+  const TICK_INTERVAL_MS = 600; // 600ms throttle for updates
   const VISIBLE_TICKS = 110; // Number of visible ticks
   const VISIBLE_DATA = -30; // Last 100 points
 
@@ -81,24 +78,68 @@ const BBBaselineChart = ({ height = 400, className = '' }) => {
         chartInstance.current = createChart(chartRef.current, {
           width: chartRef.current.offsetWidth,
           height,
-          layout: { background: { color: '#25293a' }, textColor: '#e0e0e0' },
+          layout: { // Interface: LayoutOptions
+            background: { 
+              color: '#25293a' 
+            }, 
+            textColor: '#e0e0e0',
+            fontSize: 15,
+            attributionLogo: true
+          },
           grid: { vertLines: { color: '#25293a' }, horzLines: { color: '#2d324d' } },
           timeScale: {
             timeVisible: true,
-            rightOffset: 20,
-            barSpacing: 1,
+            rightOffset: 5,
+            barSpacing: 10,
             fixLeftEdge: true,
             autoScale: false,
+            //minimumHeight: 100,
+            minBarSpacing: 20,
+            ticksVisible: false,
+            //visible: false
+            //ignoreWhitespaceIndices: false,
 
           },
-          priceScale: {
-            autoScale: true,
-            position: 'right',
-          },
+          
           handleScroll: true,
           handleScale: true,
+          // scaleMargins: {
+          //   top: 10,
+          //   bottom: 10,
+          // },
+          crosshair: {
+            horzLine: {
+              color: 'rgba(247, 191, 5, 0.5)',
+              style: LineStyle.Dashed,
+              width: 1
+            },
+            vertLine: {
+              color: 'rgba(250, 245, 248, 0.1)',
+              style: LineStyle.Solid,
+              width: 7
+            }
+            
+          },
+          rightPriceScale: {
+            mode: 0,
+            minimumWidth: 10,
+            scaleMargins: {
+              bottom: 0.3,
+              top: 0.10
+            }
+          },
+          
+          // priceScale:{
+          //   autoScale: false,
+          // },
+
+          // overlayPriceScales: {
+          //   autoScale: false,
+          //   invertScale: true
+          // }
         });
 
+        // Interface
         const seriesOptions = {
           baseValue: { type: 'price', price: 10 }, // Set baseline at 0 (customizable)
           topLineColor: 'rgba(250, 245, 248, 0.6)', // white line color
@@ -111,6 +152,8 @@ const BBBaselineChart = ({ height = 400, className = '' }) => {
           lineType: LineType.Curved,
           lastPriceAnimation: LastPriceAnimationMode.OnDataUpdate,
           lineStyle: LineStyle.Solid,
+          //pointMarkersVisible: true,
+          crosshairMarkerBackgroundColor: '#f7bf05',
         };
 
        
@@ -140,7 +183,25 @@ const BBBaselineChart = ({ height = 400, className = '' }) => {
         chartInstance.current.resize(chartRef.current.offsetWidth, height);
         chartInstance.current.timeScale().fitContent();
 
+        // ===================================
+  
+        console.log(chartInstance.current.options())
+        console.log(BaselineSeries)
+        console.log(chartInstance.current)
+
         
+        chartInstance.current.timeScale().setVisibleLogicalRange({ from: 0, to: 1 });
+        // chartInstance.current.priceScale().applyOptions({
+        //   borderColor: "#71649C",
+        // });
+        // chartInstance.current.applyOptions({
+        //   autoScale: false, // disables auto scaling based on visible content
+        //   scaleMargins: {
+        //     top: 0.1,
+        //     bottom: 0.2,
+        //   },
+        // });
+        // ===================================
 
         window.addEventListener('resize', resize);
 

@@ -87,5 +87,8 @@ export default defineConfig({
       })
     ]
   },
+  devServer: {
+    hot: true,
+  },
   watch: true,
 });
