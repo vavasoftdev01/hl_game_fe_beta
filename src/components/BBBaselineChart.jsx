@@ -89,24 +89,21 @@ const BBBaselineChart = ({ height = 400, className = '' }) => {
           grid: { vertLines: { color: '#25293a' }, horzLines: { color: '#2d324d' } },
           timeScale: {
             timeVisible: true,
-            rightOffset: 5,
-            barSpacing: 10,
             fixLeftEdge: true,
             autoScale: false,
-            //minimumHeight: 100,
             minBarSpacing: 20,
-            ticksVisible: false,
+            borderVisible: true
+            // rightOffset: 5,
+            // barSpacing: 10,
+            //minimumHeight: 100,
+            //ticksVisible: false,
             //visible: false
             //ignoreWhitespaceIndices: false,
-
+            //shiftVisibleRangeOnNewBar: false,
           },
           
           handleScroll: true,
           handleScale: true,
-          // scaleMargins: {
-          //   top: 10,
-          //   bottom: 10,
-          // },
           crosshair: {
             horzLine: {
               color: 'rgba(247, 191, 5, 0.5)',
@@ -121,43 +118,33 @@ const BBBaselineChart = ({ height = 400, className = '' }) => {
             
           },
           rightPriceScale: {
-            mode: 0,
+            mode: 1,
             minimumWidth: 10,
-            scaleMargins: {
-              bottom: 0.3,
-              top: 0.10
-            }
+            // scaleMargins: {
+            //   bottom: 0.3,
+            //   top: 0.10
+            // }
           },
-          
-          // priceScale:{
-          //   autoScale: false,
-          // },
-
-          // overlayPriceScales: {
-          //   autoScale: false,
-          //   invertScale: true
-          // }
         });
 
         // Interface
         const seriesOptions = {
           baseValue: { type: 'price', price: 10 }, // Set baseline at 0 (customizable)
-          topLineColor: 'rgba(250, 245, 248, 0.6)', // white line color
-          topFillColor1: 'rgba(5, 247, 45, 0.8)', // Top fill gradient
+          topLineColor: 'rgba(250, 245, 248, 0.7)', // white line color
+          topFillColor1: 'rgba(4, 224, 85, 2)', // Top fill gradient
           topFillColor2: 'rgba(247, 5, 126, 0.8)',
           bottomLineColor: 'rgba(247, 5, 126, 0.1)',
           bottomFillColor1: 'rgba(247, 5, 126, 0.05)',
           bottomFillColor2: 'rgba(247, 5, 126, 0)',
-          lineWidth: 1.5,
+          lineWidth: 2,
           lineType: LineType.Curved,
           lastPriceAnimation: LastPriceAnimationMode.OnDataUpdate,
           lineStyle: LineStyle.Solid,
-          //pointMarkersVisible: true,
           crosshairMarkerBackgroundColor: '#f7bf05',
+          crosshairMarkerRadius: 5,
+          //pointMarkersVisible: true,
+          //relativeGradient: true
         };
-
-       
-
         // Add watermark to the first pane if it exists
         if (chartInstance.current.panes().length > 0) {
           textWatermark.current = createTextWatermark(chartInstance.current.panes()[0], {
@@ -184,23 +171,10 @@ const BBBaselineChart = ({ height = 400, className = '' }) => {
         chartInstance.current.timeScale().fitContent();
 
         // ===================================
-  
+        console.log(chartInstance.current.timeScale().options())
         console.log(chartInstance.current.options())
         console.log(BaselineSeries)
-        console.log(chartInstance.current)
-
-        
-        chartInstance.current.timeScale().setVisibleLogicalRange({ from: 0, to: 1 });
-        // chartInstance.current.priceScale().applyOptions({
-        //   borderColor: "#71649C",
-        // });
-        // chartInstance.current.applyOptions({
-        //   autoScale: false, // disables auto scaling based on visible content
-        //   scaleMargins: {
-        //     top: 0.1,
-        //     bottom: 0.2,
-        //   },
-        // });
+        console.log(chartInstance.current.panes()[0])
         // ===================================
 
         window.addEventListener('resize', resize);
@@ -448,9 +422,10 @@ const BBBaselineChart = ({ height = 400, className = '' }) => {
   }, [isInitialized, chartInstance, baselineSeries, websocketUrl]);
 
   return (
-    <div style={{ position: 'relative' }}>
+    // style={{ position: 'relative' }}
+    <div>
       <div ref={chartRef} className={className} />
-      <div className='flex flex-row gap-2'>
+      {/* <div className='flex flex-row gap-2'>
         <button
           onClick={addMarker}
           style={{
@@ -483,7 +458,7 @@ const BBBaselineChart = ({ height = 400, className = '' }) => {
         >
           Clear
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };
