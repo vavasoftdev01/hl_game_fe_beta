@@ -47,7 +47,7 @@ const App = () => {
                 <DynamicPanel />
               </div>
             </div>
-            <div className="bg-slate-800 border border-solid border-slate-700 rounded-b-lg p-6 flex justify-between overflow-auto min-h-[400px]">
+            <div className="bg-slate-900 border border-solid border-slate-700 rounded-b-lg p-6 flex justify-between overflow-auto min-h-[400px]">
               <HistoricalTradesLeaderBoardPanel />
             </div>
           </div>
