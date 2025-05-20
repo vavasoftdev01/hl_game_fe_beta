@@ -84,7 +84,7 @@ const BBBaselineChart = ({ height = 400, className = '' }) => {
             }, 
             textColor: '#90A1B9',
             fontSize: 15,
-            attributionLogo: true
+            attributionLogo: false
           },
           grid: { vertLines: { color: '#25293a' }, horzLines: { color: '#2d324d' } },
           timeScale: {

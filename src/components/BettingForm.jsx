@@ -2,11 +2,11 @@ import { React, useState } from 'react';
 
 function BettingForm() {
   return (
-    <div className="flex flex-col gap-2 bg-slate-800 border border-solid border-slate-400 rounded-lg p-5 fill-white drop-shadow-xl/25">
+    <div className="flex flex-col gap-2 bg-slate-800 border border-solid border-slate-700 rounded-lg p-5 fill-white drop-shadow-xl/50 font-xs">
       <div className="gap-2 rounded-md flex flex-row w-full text-sm">
         <div className="input-cont w-full flex flex-col text-slate-400 font-medium">
           <span className="p-1">Up or Down?</span>
-          <input type="text" placeholder="Enter amount" className="w-full input input-md bg-transparent border border-solid border-slate-400" />
+          <input type="text" placeholder="Enter amount" className="w-full input input-md bg-transparent border border-solid border-slate-700" />
         </div>
         <div className="flex flex-col text-slate-400 font-medium">
           <span className="p-1 text-shadow-lg">How it works?</span>
