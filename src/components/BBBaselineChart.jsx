@@ -80,9 +80,9 @@ const BBBaselineChart = ({ height = 400, className = '' }) => {
           height,
           layout: { // Interface: LayoutOptions
             background: { 
-              color: '#25293a' 
+              color: '#1D293D' 
             }, 
-            textColor: '#e0e0e0',
+            textColor: '#90A1B9',
             fontSize: 15,
             attributionLogo: true
           },
