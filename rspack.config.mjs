@@ -1,28 +1,27 @@
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "@rspack/cli";
-import { rspack } from "@rspack/core";
+import { rspack, CssExtractRspackPlugin } from "@rspack/core";
 import RefreshPlugin from "@rspack/plugin-react-refresh";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const isDev = process.env.NODE_ENV === "development";
 
-// Target browsers, see: https://github.com/browserslist/browserslist
 const targets = ["chrome >= 87", "edge >= 88", "firefox >= 78", "safari >= 14"];
 
 export default defineConfig({
   context: __dirname,
   entry: {
-    main: "./src/main.jsx"
+    main: "./src/main.jsx",
   },
   resolve: {
-    extensions: ["...", ".ts", ".tsx", ".jsx"]
+    extensions: ["...", ".ts", ".tsx", ".jsx"],
   },
   module: {
     rules: [
       {
         test: /\.svg$/,
-        type: "asset"
+        type: "asset",
       },
       {
         test: /\.(jsx?|tsx?)$/,
@@ -33,27 +32,25 @@ export default defineConfig({
               jsc: {
                 parser: {
                   syntax: "typescript",
-                  tsx: true
+                  tsx: true,
                 },
                 transform: {
                   react: {
                     runtime: "automatic",
                     development: isDev,
-                    refresh: isDev
-                  }
-                }
+                    refresh: isDev,
+                  },
+                },
               },
-              env: { targets }
-            }
-          }
-        ]
+              env: { targets },
+            },
+          },
+        ],
       },
       {
         test: /\.css$/,
         use: [
-          {
-            loader: "style-loader",
-          },
+          isDev ? { loader: "style-loader" } : { loader: CssExtractRspackPlugin.loader },
           {
             loader: "css-loader",
             options: {
@@ -69,23 +66,67 @@ export default defineConfig({
             },
           },
         ],
-        type: "javascript/auto", // Explicitly set type to avoid experiments.css conflict
+        type: "javascript/auto",
       },
-    ]
+    ],
   },
   plugins: [
     new rspack.HtmlRspackPlugin({
-      template: "./index.html"
+      template: "./index.html",
     }),
-    isDev ? new RefreshPlugin() : null
+    isDev ? new RefreshPlugin() : null,
+    !isDev &&
+      new CssExtractRspackPlugin({
+        filename: "[name].css",
+        chunkFilename: "[id].css",
+      }),
+    process.env.ANALYZE &&
+      new rspack.BundleAnalyzerPlugin({
+        analyzerMode: "static",
+        reportFilename: "bundle-report.html",
+        openAnalyzer: true,
+      }),
   ].filter(Boolean),
   optimization: {
+    splitChunks: {
+      chunks: "all",
+      minSize: 30000,
+      maxSize: 200000,
+      maxAsyncRequests: 5,
+      maxInitialRequests: 3,
+      cacheGroups: {
+        react: {
+          test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+          name: "react",
+          chunks: "all",
+          priority: 0,
+          enforce: true,
+        },
+        vendors: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "vendors",
+          chunks: "all",
+          priority: -10,
+          enforce: true,
+          maxSize: 200000,
+        },
+        default: {
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true,
+          maxSize: 200000,
+        },
+      },
+    },
     minimizer: [
       new rspack.SwcJsMinimizerRspackPlugin(),
       new rspack.LightningCssMinimizerRspackPlugin({
-        minimizerOptions: { targets }
-      })
-    ]
+        minimizerOptions: { targets },
+      }),
+    ],
+  },
+  performance: {
+    hints: false,
   },
   devServer: {
     hot: true,

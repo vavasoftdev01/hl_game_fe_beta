@@ -425,7 +425,7 @@ const BBBaselineChart = ({ height = 400, className = '' }) => {
     // style={{ position: 'relative' }}
     <div>
       <div ref={chartRef} className={className} />
-      {/* <div className='flex flex-row gap-2'>
+      <div className='flex flex-row gap-2'>
         <button
           onClick={addMarker}
           style={{
@@ -458,7 +458,7 @@ const BBBaselineChart = ({ height = 400, className = '' }) => {
         >
           Clear
         </button>
-      </div> */}
+      </div>
     </div>
   );
 };

@@ -1,6 +1,11 @@
 import { React, useState } from 'react';
+import { useStore } from './../states/store';
 
 function BettingForm() {
+  const { count, increment, betType, createUserBet } = useStore();
+
+  
+
   return (
     <div className="flex flex-col gap-2 bg-slate-800 border border-solid border-slate-700 rounded-lg p-5 fill-white drop-shadow-xl/50 font-xs">
       <div className="gap-2 rounded-md flex flex-row w-full text-sm">
@@ -19,9 +24,9 @@ function BettingForm() {
           </div>
         </div>
       </div>
-
+      WBB: { count } - { betType }
       <div className="flex flex-row w-full gap-1">
-        <button className="group btn btn-secondary w-1/2 hover:text-white flex flex-row items-center justify-center gap-2">
+        <button className="group btn btn-secondary w-1/2 hover:text-white flex flex-row items-center justify-center gap-2" onClick={increment}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="1em"
