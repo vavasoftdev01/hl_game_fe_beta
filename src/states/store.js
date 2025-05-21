@@ -10,6 +10,16 @@ export const useStore = create((set) => ({
   increment: () => set((state) => ({ count: state.count + 1 })),
   reset: () => set(() => ({ count: 0 })),
   betType: null,
+  isBetPlaced: false,
+  userPlaceBet: (type) => set((state) => ({
+    betType: type,
+    isBetPlaced: true
+  }),
+  ),
+  resetAfterPlaced: () => set((state) => ({
+    betType: null,
+    isBetPlaced: false
+  })),
 
 
 }));

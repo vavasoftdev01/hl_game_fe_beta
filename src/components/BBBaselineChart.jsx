@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { createChart, BaselineSeries, LineType, LastPriceAnimationMode, LineStyle, createTextWatermark, createSeriesMarkers, PriceScaleMode, IChartBase, applyOptions, HistogramSeries } from 'lightweight-charts';
 import io from 'socket.io-client';
+import { useStore } from './../states/store';
 
 const BBBaselineChart = ({ height = 400, className = '' }) => {
   const chartRef = useRef(null);
@@ -25,6 +26,8 @@ const BBBaselineChart = ({ height = 400, className = '' }) => {
   const backendApiUrl = 'http://localhost:3000';
   const websocketUrl = 'http://localhost:8080/hl_price';
 
+  const { betType, isBetPlaced, resetAfterPlaced } = useStore();
+
   const resize = () => {
     if (chartInstance.current && chartRef.current) {
       chartInstance.current.resize(chartRef.current.offsetWidth, height);
@@ -33,14 +36,18 @@ const BBBaselineChart = ({ height = 400, className = '' }) => {
 
   const addMarker = () => {
     if (baselineSeries.current && chartInstance.current && chartData.length > 0) {
+      let shape = (betType === 'UP') ? "arrowUp": "arrowDown";
+
       const latestData = chartData[chartData.length - 1];
       const newMarker = {
         time: latestData.time, // Set marker time to the latest tick's timestamp
-        position: 'inBar', // Centered position within the bar
-        color: '#fff',
-        shape: 'square',
+        position: (betType === 'UP') ? "aboveBar": "belowBar", // Centered position within the bar
+        color: '#e0dcde',
+        shape: (betType === 'UP') ? "arrowUp": "arrowDown",
         text: `Price: ${latestData.value.toFixed(2)} 🏳️`,
       };
+
+      console.log(newMarker)
       // Append the new marker to the existing ones
       setMarkers((prevMarkers) => {
         const updatedMarkers = [...prevMarkers, newMarker];
@@ -421,11 +428,18 @@ const BBBaselineChart = ({ height = 400, className = '' }) => {
     return cleanup;
   }, [isInitialized, chartInstance, baselineSeries, websocketUrl]);
 
+  useEffect(() => {
+    if (isBetPlaced) {
+      addMarker();
+      resetAfterPlaced();
+    }
+  }, [isBetPlaced, addMarker]);
+
   return (
     // style={{ position: 'relative' }}
     <div>
       <div ref={chartRef} className={className} />
-      <div className='flex flex-row gap-2'>
+      {/* <div className='flex flex-row gap-2'>
         <button
           onClick={addMarker}
           style={{
@@ -458,7 +472,7 @@ const BBBaselineChart = ({ height = 400, className = '' }) => {
         >
           Clear
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };
