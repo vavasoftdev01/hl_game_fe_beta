@@ -11,19 +11,19 @@ function BettingForm() {
 
   return (
     <div className="flex flex-col gap-2 bg-slate-800 border border-solid border-slate-700 rounded-lg p-5 fill-white drop-shadow-xl/50 font-xs overflow-x-scroll">
-      <div className="gap-2 rounded-md flex flex-row w-full text-sm">
+      <div className="gap-2 rounded-md flex flex-row w-full text-sm max-sm:flex-col sm:max-lg:flex-col">
         <div className="input-cont w-full flex flex-col text-slate-400 font-medium">
           <span className="p-1">Up or Down?</span>
-          <input type="text" placeholder="Enter amount" className="w-full input input-md bg-transparent border border-solid border-slate-700 " />
+          <input type="text" placeholder="Enter amount" className="w-full input input-md bg-transparent border border-solid border-slate-700"/>
         </div>
         <div className="flex flex-col text-slate-400 font-medium">
           <span className="p-1 text-shadow-lg">How it works?</span>
           <div className="btn-multi w-full flex flex-row gap-1">
-            <button className="btn bg-gradient-to-b from-red-500 to-orange-500 hover:underline hover:shadow-md shadow-orange-500/50">$5</button>
-            <button className="btn bg-gradient-to-b from-red-500 to-orange-500 hover:underline hover:shadow-md shadow-orange-500/50">$10</button>
-            <button className="btn bg-gradient-to-b from-red-500 to-orange-500 hover:underline hover:shadow-md shadow-orange-500/50">$15</button>
-            <button className="btn bg-gradient-to-b from-red-500 to-orange-500 hover:underline hover:shadow-md shadow-orange-500/50">$25</button>
-            <button className="btn bg-gradient-to-b from-red-500 to-orange-500 hover:underline hover:shadow-md shadow-orange-500/50">$50</button>
+            <button className="btn bg-gradient-to-b from-red-500 to-orange-500 hover:underline hover:shadow-md shadow-orange-500/50 max-sm:btn-lg sm:max-lg:btn-lg">$5</button>
+            <button className="btn bg-gradient-to-b from-red-500 to-orange-500 hover:underline hover:shadow-md shadow-orange-500/50 max-sm:btn-lg sm:max-lg:btn-lg">$10</button>
+            <button className="btn bg-gradient-to-b from-red-500 to-orange-500 hover:underline hover:shadow-md shadow-orange-500/50 max-sm:btn-lg sm:max-lg:btn-lg">$15</button>
+            <button className="btn bg-gradient-to-b from-red-500 to-orange-500 hover:underline hover:shadow-md shadow-orange-500/50 max-sm:btn-lg sm:max-lg:btn-lg">$25</button>
+            <button className="btn bg-gradient-to-b from-red-500 to-orange-500 hover:underline hover:shadow-md shadow-orange-500/50 max-sm:btn-lg sm:max-lg:btn-lg">$50</button>
           </div>
         </div>
       </div>
