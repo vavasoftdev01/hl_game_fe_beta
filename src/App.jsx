@@ -83,14 +83,14 @@ const App = () => {
               
             </div>
             <div className="flex flex-row gap-1">
-              <div className="w-2/3 flex flex-col border border-solid border-slate-700 rounded-tl-lg rounded-bl-lg h-full">
+              <div className="w-2/3 flex flex-col border border-solid border-slate-700 rounded-tl-lg rounded-bl-lg h-full max-sm:w-full sm:w-full">
                 <BBBaselineChart height={500} />
                 {/* <AdvancedRealTimeChart theme="dark" height={500} style="2" interval="1" symbol='btcusdt'></AdvancedRealTimeChart> */}
                 <div className="w-full p-5 bg-slate-900 h-1/4">
                   <BettingForm />
                 </div>
               </div>
-              <div className="w-1/3 bg-slate-800 border border-solid border-slate-700 rounded-tr-lg">
+              <div className="w-1/3 bg-slate-800 border border-solid border-slate-700 rounded-tr-lg max-sm:hidden sm:max-lg:hidden">
                 <DynamicPanel />
               </div>
             </div>

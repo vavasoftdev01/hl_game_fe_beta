@@ -4,7 +4,7 @@ function HistoricalTradesLeaderBoardPanel() {
   const [activeTab, setActiveTab] = useState('history');
 
   return (
-    <div className="w-full flex flex-col bg-slate-800 border border-solid border-slate-700 rounded-lg p-5 fill-white drop-shadow-xl/50">
+    <div className="w-full flex flex-col bg-slate-800 border border-solid border-slate-700 rounded-lg p-5 fill-white drop-shadow-xl/50 overflow-x-scroll">
       {/* Tab Navigation */}
       <div className="flex border-b border-gray-700">
         <button
