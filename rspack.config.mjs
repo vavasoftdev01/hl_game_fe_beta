@@ -3,6 +3,10 @@ import { fileURLToPath } from "node:url";
 import { defineConfig } from "@rspack/cli";
 import { rspack, CssExtractRspackPlugin } from "@rspack/core";
 import RefreshPlugin from "@rspack/plugin-react-refresh";
+import dotenv from "dotenv";
+
+// Load .env file
+dotenv.config();
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const isDev = process.env.NODE_ENV === "development";
@@ -73,6 +77,12 @@ export default defineConfig({
   plugins: [
     new rspack.HtmlRspackPlugin({
       template: "./index.html",
+    }),
+    new rspack.EnvironmentPlugin({
+      WEBSOCKET_URL: process.env.WEBSOCKET_URL || "http://localhost:8080/hl_price",
+      BACKEND_API_URL: process.env.BACKEND_API_URL || "http://localhost:3000",
+      NODE_ENV: process.env.NODE_ENV || "development", // Include NODE_ENV for libraries
+      RT_KEY: process.env.NODE_ENV || "4kxrs1P3gbc99274NzR6BYBXAhlXsXYb"
     }),
     isDev ? new RefreshPlugin() : null,
     !isDev &&

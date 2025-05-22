@@ -23,8 +23,8 @@ const BBBaselineChart = ({ height = 400, className = '' }) => {
   const VISIBLE_TICKS = 110; // Number of visible ticks
   const VISIBLE_DATA = -30; // Last 100 points
 
-  const backendApiUrl = 'http://localhost:3000';
-  const websocketUrl = 'http://localhost:8080/hl_price';
+  const backendApiUrl = process.env.BACKEND_API_URL;
+  const websocketUrl = process.env.WEBSOCKET_URL;
 
   const { betType, isBetPlaced, resetAfterPlaced } = useStore();
 
@@ -60,8 +60,9 @@ const BBBaselineChart = ({ height = 400, className = '' }) => {
   };
 
   const clearMarkers = () => {
+    
     if (baselineSeries.current) {
-      setMarkers([]); // Reset markers state to empty array
+      //setMarkers([]); // Reset markers state to empty array
       //console.log('Markers cleared from state');
     } else {
       //console.warn('Cannot clear markers: No series available');
@@ -72,10 +73,12 @@ const BBBaselineChart = ({ height = 400, className = '' }) => {
   useEffect(() => {
     if (baselineSeries.current && markers.length === 0 && chartInstance.current) {
       createSeriesMarkers(baselineSeries.current, []); // Clear markers when state is empty
-      //console.log('Markers cleared from chart');
+      console.log('Markers cleared from chart');
+      console.log(markers);
     } else if (baselineSeries.current && markers.length > 0 && chartInstance.current) {
       createSeriesMarkers(baselineSeries.current, markers); // Update chart with current markers
-      //console.log('Markers updated on chart:', markers.length);
+      console.log('Markers updated on chart:', markers.length);
+      console.log(baselineSeries.current)
     }
   }, [markers, baselineSeries.current, chartInstance.current]);
 
@@ -439,8 +442,8 @@ const BBBaselineChart = ({ height = 400, className = '' }) => {
     // style={{ position: 'relative' }}
     <div>
       <div ref={chartRef} className={className} />
-      {/* <div className='flex flex-row gap-2'>
-        <button
+      <div className='flex flex-row gap-2'>
+        {/* <button
           onClick={addMarker}
           style={{
             top: '10px',
@@ -455,8 +458,8 @@ const BBBaselineChart = ({ height = 400, className = '' }) => {
           }}
         >
           Add Marker
-        </button>
-        <button
+        </button> */}
+        {/* <button
           onClick={clearMarkers}
           style={{
             top: '10px',
@@ -471,8 +474,8 @@ const BBBaselineChart = ({ height = 400, className = '' }) => {
           }}
         >
           Clear
-        </button>
-      </div> */}
+        </button> */}
+      </div>
     </div>
   );
 };

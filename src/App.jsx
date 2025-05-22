@@ -74,11 +74,11 @@ const App = () => {
                   isTransparent={false}
                 /> */}
 
-                <Ticker locale="kr" symbols={symbols} colorTheme="dark"></Ticker>
+                {/* <Ticker locale="kr" symbols={symbols} colorTheme="dark"></Ticker> */}
 
                 {/* <SymbolInfo colorTheme="dark" symbol="BINANCE:BTCUSDT" autosize></SymbolInfo> */}
 
-                {/* <TickerTape colorTheme="dark" symbols={symbols}></TickerTape> */}
+                <TickerTape colorTheme="dark" symbols={symbols}></TickerTape>
               </div>
               
             </div>
