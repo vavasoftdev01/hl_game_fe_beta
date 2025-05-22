@@ -8,7 +8,9 @@ const HistoricalTradesLeaderBoardPanel = lazy(() =>
   import('./components/HistoricalTradesLeaderBoardPanel')
 );
 
-import { SingleTicker, TickerTape, AdvancedRealTimeChart, Ticker, SymbolInfo   } from "react-ts-tradingview-widgets";
+// import { SingleTicker, TickerTape, AdvancedRealTimeChart, Ticker, SymbolInfo   } from "react-ts-tradingview-widgets";
+
+const CoinGeckoMarquee = lazy(() => import('./components/CoinGeckoMarquee'));
 
 
 const App = () => {
@@ -78,7 +80,8 @@ const App = () => {
 
                 {/* <SymbolInfo colorTheme="dark" symbol="BINANCE:BTCUSDT" autosize></SymbolInfo> */}
 
-                <TickerTape colorTheme="dark" symbols={symbols}></TickerTape>
+                {/* <TickerTape colorTheme="dark" symbols={symbols}></TickerTape> */}
+                <CoinGeckoMarquee coinIds="bitcoin,ethereum" />
               </div>
               
             </div>
