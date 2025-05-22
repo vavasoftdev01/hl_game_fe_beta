@@ -90,7 +90,7 @@ const App = () => {
                   <BettingForm />
                 </div>
               </div>
-              <div className="w-1/3 bg-slate-800 border border-solid border-slate-700 rounded-tr-lg max-sm:hidden sm:max-lg:hidden">
+              <div className="w-1/3 bg-slate-800 border border-solid border-slate-700 rounded-tr-lg max-sm:hidden sm:max-lg:hidden overflow-x-hidden">
                 <DynamicPanel />
               </div>
             </div>
