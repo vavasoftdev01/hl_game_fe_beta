@@ -1,3 +1,26 @@
 .chart-container {
   @apply w-full h-[400px];
 }
+
+/* betting form */
+.btn-uniform {
+  width: calc(100% / 7 - 0.5rem); /* Equal width for 7 buttons, accounting for gap */
+  min-width: 4rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Remove responsive width adjustments since buttons will stay inline */
+
+@media (max-width: 640px) { /* max-sm breakpoint */
+  .btn-uniform {
+    width: calc(100% / 3 - 0.5rem); /* 3 buttons per row on small screens */
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) { /* sm:max-lg breakpoint */
+  .btn-uniform {
+    width: calc(100% / 5 - 0.5rem); /* 5 buttons per row on medium screens */
+  }
+}
