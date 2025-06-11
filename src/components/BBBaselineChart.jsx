@@ -25,6 +25,8 @@ const BBBaselineChart = ({ height = 400, className = '' }) => {
 
   const backendApiUrl = process.env.BACKEND_API_URL;
   const websocketUrl = process.env.WEBSOCKET_URL;
+  const websocketCryptoUrl = process.env.HL_CRYPTO_v1_WS_SERVER;
+  const apiCryptoUrl = process.env.HL_API_v1_SERVER;
 
   const { betType, isBetPlaced, resetAfterPlaced } = useStore();
 
@@ -230,7 +232,7 @@ const BBBaselineChart = ({ height = 400, className = '' }) => {
           //console.log(`Fetching historical data: start=${startTime}, end=${endTime}`);
 
           const response = await fetch(
-            `${backendApiUrl}/binance/historical?symbol=BTCUSDT&startTime=${startTime}&endTime=${endTime}&limit=100`
+            `${apiCryptoUrl}/binance/historical?symbol=BTCUSDT&startTime=${startTime}&endTime=${endTime}&limit=100`
           );
           if (!response.ok) throw new Error('Failed to fetch historical data');
           const candles = await response.json();
@@ -329,7 +331,7 @@ const BBBaselineChart = ({ height = 400, className = '' }) => {
     if (!isInitialized.current || !chartInstance.current || !baselineSeries.current) return;
 
     const setupWebSocket = () => {
-      socketRef.current = io(websocketUrl, {
+      socketRef.current = io(`${websocketCryptoUrl}/hl_price`, {
         transports: ['websocket'],
         reconnectionAttempts: 5,
         reconnectionDelay: 5000,

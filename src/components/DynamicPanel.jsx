@@ -26,7 +26,8 @@ function DynamicPanel() {
               <div className="flex flex-row justify-between">
                 <span>Bet</span>
                 <span className="flex items-center gap-1">
-                  $0 <span className="w-3 h-3 bg-green-500 rounded-full"></span>
+                  $0
+                  <div aria-label="status" className="status status-success animate-pulse"></div>
                 </span>
               </div>
               <div className="flex flex-row justify-between">
@@ -56,7 +57,8 @@ function DynamicPanel() {
               <div className="flex flex-row justify-between">
                 <span>Players</span>
                 <span className="flex items-center gap-1">
-                  0 <span className="w-3 h-3 bg-pink-500 rounded-full"></span>
+                  0
+                  <div aria-label="status" className="status status-secondary animate-pulse"></div>
                 </span>
               </div>
               <div className="flex flex-row justify-between">

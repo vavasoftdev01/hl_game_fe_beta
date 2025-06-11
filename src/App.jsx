@@ -87,7 +87,17 @@ const App = () => {
             </div>
             <div className="flex flex-row gap-1">
               <div className="w-2/3 flex flex-col border border-solid border-slate-700 rounded-tl-lg rounded-bl-lg h-full max-sm:w-full sm:w-full">
-                <BBBaselineChart height={500} />
+                <div className="flex flex-col w-full p-5 bg-transparent h-2/5">
+                  <div className="w-full">
+                    <h1 className="text-center">59:59:59 </h1>
+                  </div>
+                  <div className="flex flex-row w-full">
+                    <div className="bg-success w-full">.</div>
+                    <div className="bg-secondary w-full end-1">.</div>
+                  </div>
+                  
+                </div>
+                <BBBaselineChart height={300} />
                 {/* <AdvancedRealTimeChart theme="dark" height={500} style="2" interval="1" symbol='btcusdt'></AdvancedRealTimeChart> */}
                 <div className="w-full p-5 bg-slate-900 h-1/4">
                   <BettingForm />

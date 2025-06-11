@@ -80,11 +80,14 @@ export default defineConfig({
     }),
     new rspack.EnvironmentPlugin({
       // Map you .env variables here ..
-      WEBSOCKET_URL: process.env.WEBSOCKET_URL || "http://localhost:8080/hl_price",
-      BACKEND_API_URL: process.env.BACKEND_API_URL || "http://localhost:3000",
+      WEBSOCKET_URL: process.env.WEBSOCKET_URL,
+      BACKEND_API_URL: process.env.BACKEND_API_URL,
+      HL_API_v1_SERVER: process.env.HL_API_v1_SERVER,
+      HL_CRYPTO_v1_WS_SERVER: process.env.HL_CRYPTO_v1_WS_SERVER,
       ALLOWED_ENCRYPTION_DECRYPTION: process.env.ALLOWED_ENCRYPTION_DECRYPTION,
       HL_MAXIMUM_BET_LIMIT: process.env.HL_MAXIMUM_BET_LIMIT,
       HL_MINIMUM_BET_LIMIT: process.env.HL_MINIMUM_BET_LIMIT,
+      
       NODE_ENV: process.env.NODE_ENV || "development", // Include NODE_ENV for libraries
       RT_KEY: process.env.NODE_ENV || "4kxrs1P3gbc99274NzR6BYBXAhlXsXYb"
     }),
