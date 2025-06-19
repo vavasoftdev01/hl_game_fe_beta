@@ -20,6 +20,11 @@ export const useStore = create((set) => ({
     betType: null,
     isBetPlaced: false
   })),
-
+  // GAMETIMER STATES
+  timerStatus: null, // Enum: betting_open, draw, payout
+  setTimerStatus: (newStatus) => set({ timerStatus: newStatus }),
+  // RESULTS STATES
+  resultsData:null, // Result socket
+  setResultData: (newResults) => set({ resultsData: newResults })
 
 }));

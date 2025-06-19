@@ -1,3 +1,5 @@
+// rspack.config.mjs
+
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "@rspack/cli";
@@ -25,7 +27,14 @@ export default defineConfig({
     rules: [
       {
         test: /\.svg$/,
-        type: "asset",
+        type: "asset", // This rule handles SVG files
+      },
+      {
+        // --- ADDED RULE FOR OTHER IMAGE FORMATS (png, jpeg, gif, webp, ico) ---
+        // This tells Rspack to treat these files as assets and output their URLs.
+        test: /\.(png|jpe?g|gif|webp|ico)$/i,
+        type: 'asset/resource', // 'asset/resource' emits a separate file and exports the URL.
+                               // 'asset' (without /resource) can inline small assets as data URLs.
       },
       {
         test: /\.(jsx?|tsx?)$/,
@@ -79,7 +88,7 @@ export default defineConfig({
       template: "./index.html",
     }),
     new rspack.EnvironmentPlugin({
-      // Map you .env variables here ..
+      // Map your .env variables here ..
       WEBSOCKET_URL: process.env.WEBSOCKET_URL,
       BACKEND_API_URL: process.env.BACKEND_API_URL,
       HL_API_v1_SERVER: process.env.HL_API_v1_SERVER,

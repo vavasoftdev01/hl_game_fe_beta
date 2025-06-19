@@ -7,6 +7,8 @@ import Crypto from '../crypto';
 function BettingForm() {
   const { count, betType, userPlaceBet } = useStore();
   const [bettingAmount, setBettingAmount] = useState('');
+  const urlParameters = new URLSearchParams(window.location.search);
+  const token = urlParameters.get('token');
 
   const computeBettingAmount = (e) => {
     const value = e.target.value;
@@ -42,6 +44,7 @@ function BettingForm() {
     const amountToSend = bettingAmount === '' ? '0' : bettingAmount;
 
     let parameters = {
+      token: token,
       user_id: 'coldOne-555',
       hl_game_id: 23,
       user_bets: type.toLowerCase() === 'up' ? 'high' : 'low',
@@ -216,7 +219,7 @@ function BettingForm() {
               d="m33.429 14.206-6.464 6.464-5.373-5.375-5.999 5.998L19 24.7H9.5v-9.5l3.407 3.407 8.685-8.685 5.373 5.373 4.702-4.7a15.2 15.2 0 1 0 1.762 3.61zm2.922-2.96.019.02-.008.007A18.9 18.9 0 0 1 38 19c0 10.494-8.506 19-19 19S0 29.494 0 19 8.506 0 19 0c7.733 0 14.383 4.617 17.35 11.246"
             />
           </svg>
-          <span className="text-white">High</span>
+          <span className="text-white">UP</span>
         </button>
 
         <button
@@ -237,7 +240,7 @@ function BettingForm() {
               d="m33.429 14.206-6.464 6.464-5.373-5.375-5.999 5.998L19 24.7H9.5v-9.5l3.407 3.407 8.685-8.685 5.373 5.373 4.702-4.7a15.2 15.2 0 1 0 1.762 3.61zm2.922-2.96.019.02-.008.007A18.9 18.9 0 0 1 38 19c0 10.494-8.506 19-19 19S0 29.494 0 19 8.506 0 19 0c7.733 0 14.383 4.617 17.35 11.246"
             />
           </svg>
-          <span className="text-white">Low</span>
+          <span className="text-white">DOWN</span>
         </button>
       </div>
     </div>

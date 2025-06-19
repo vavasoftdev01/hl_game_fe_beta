@@ -1,21 +1,22 @@
 import { useState, useEffect, Suspense, lazy } from 'react';
 import './App.css';
-
+import { useStore } from './states/store';
 const BBBaselineChart = lazy(() => import('./components/BBBaselineChart'));
 const BettingForm = lazy(() => import('./components/BettingForm'));
 const DynamicPanel = lazy(() => import('./components/DynamicPanel'));
 const HistoricalTradesLeaderBoardPanel = lazy(() =>
   import('./components/HistoricalTradesLeaderBoardPanel')
 );
+const GameTimer = lazy(() => import('./components/GameTimer'));
+import Loader from './assets/images/loaders/loader.gif';
 
 // import { SingleTicker, TickerTape, AdvancedRealTimeChart, Ticker, SymbolInfo   } from "react-ts-tradingview-widgets";
 
 const CoinGeckoMarquee = lazy(() => import('./components/CoinGeckoMarquee'));
 
-
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
-
+  const { timerStatus } = useStore();
   const [symbols, setSymbols] = useState([
     {
       "proName": "BINANCE:BTCUSDT",
@@ -40,6 +41,11 @@ const App = () => {
   ]);
 
   useEffect(() => {
+    console.log(timerStatus);
+  });
+
+
+  useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 1000);
@@ -54,13 +60,16 @@ const App = () => {
       
       {isLoading ? (
         <div className="flex justify-center items-center h-[400px]">
-          <div className="loading loading-dots w-20 text-purple-600"></div>
+          <img class="h-40 w-96 object-contain" src={Loader} />
+          {/* <div className="loading loading-dots w-20 text-purple-600"></div> */}
         </div>
       ) : (
         <Suspense
           fallback={
             <div className="flex justify-center items-center h-[400px]">
-              <div className="loading loading-dots w-20 text-purple-600"></div>
+              
+              <img class="h-40 w-96 object-contain" src={Loader} />
+              {/* <div className="loading loading-dots w-20 text-purple-600"></div> */}
             </div>
           }
         >
@@ -89,7 +98,9 @@ const App = () => {
               <div className="w-2/3 flex flex-col border border-solid border-slate-700 rounded-tl-lg rounded-bl-lg h-full max-sm:w-full sm:w-full">
                 <div className="flex flex-col w-full p-5 bg-transparent h-2/5">
                   <div className="w-full">
-                    <h1 className="text-center">59:59:59 </h1>
+                    <div className="text-center p-2">
+                      <GameTimer />
+                    </div>
                   </div>
                   <div className="flex flex-row w-full">
                     <div className="bg-success w-full">.</div>
