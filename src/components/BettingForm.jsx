@@ -1,14 +1,12 @@
 import { useState } from 'react';
 import { useStore } from './../states/store';
-import axios from 'axios';
 import Swal from 'sweetalert2';
 import Crypto from '../crypto';
+import HLBackendV1Api from '../utils/http/api';
 
 function BettingForm() {
   const { count, betType, userPlaceBet } = useStore();
   const [bettingAmount, setBettingAmount] = useState('');
-  const urlParameters = new URLSearchParams(window.location.search);
-  const token = urlParameters.get('token');
 
   const computeBettingAmount = (e) => {
     const value = e.target.value;
@@ -44,7 +42,6 @@ function BettingForm() {
     const amountToSend = bettingAmount === '' ? '0' : bettingAmount;
 
     let parameters = {
-      token: token,
       user_id: 'coldOne-555',
       hl_game_id: 23,
       user_bets: type.toLowerCase() === 'up' ? 'high' : 'low',
@@ -61,7 +58,7 @@ function BettingForm() {
       parameters = {'rt_token': token}
     }
 
-    await axios
+    await HLBackendV1Api
       .post(`${process.env.BACKEND_API_URL}/betting-management/createUserBet`, parameters)
       .then((response) => {
         const isError = response.data.statusCode < 200 || response.data.statusCode > 299;

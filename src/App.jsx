@@ -9,6 +9,8 @@ const HistoricalTradesLeaderBoardPanel = lazy(() =>
 );
 const GameTimer = lazy(() => import('./components/GameTimer'));
 import Loader from './assets/images/loaders/loader.gif';
+import AuthError from './assets/images/errors/auth-error.jpg';
+import HLBackendV1Api from './utils/http/api';
 
 // import { SingleTicker, TickerTape, AdvancedRealTimeChart, Ticker, SymbolInfo   } from "react-ts-tradingview-widgets";
 
@@ -17,6 +19,7 @@ const CoinGeckoMarquee = lazy(() => import('./components/CoinGeckoMarquee'));
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { timerStatus } = useStore();
+  const [isAuthUser, setIsAuthUser] = useState(false);
   const [symbols, setSymbols] = useState([
     {
       "proName": "BINANCE:BTCUSDT",
@@ -40,9 +43,18 @@ const App = () => {
     }
   ]);
 
+
+  const getAuth = async() => {
+    await HLBackendV1Api.get('/betting-management/checkAuthorization').then((response) => {
+      setIsAuthUser(true)
+    }).catch((error) => {
+      console.log(error.status)
+    });
+  }
+
   useEffect(() => {
-    console.log(timerStatus);
-  });
+    getAuth();
+  }, []);
 
 
   useEffect(() => {
@@ -73,7 +85,7 @@ const App = () => {
             </div>
           }
         >
-          <div className="flex flex-col gap-1 max-h-[100%] max-w-[1680px] mx-auto">
+          {(isAuthUser) && <div className="flex flex-col gap-1 max-h-[100%] max-w-[1680px] mx-auto">
             <div className="w-full">
               <div className="tradingview-widget-container text-red-300">
                 {/* <SingleTicker
@@ -124,7 +136,10 @@ const App = () => {
             <footer>
               {/* <Ticker locale="kr" symbols={symbols} colorTheme="dark"></Ticker> */}
             </footer>
-          </div>
+          </div>}
+          {(!isAuthUser)&& <div className="h-full w-full">
+            <img class="object-contain mx-auto" src={AuthError} />
+          </div>}
         </Suspense>
       )}
     </div>
