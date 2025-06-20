@@ -1,6 +1,15 @@
-import React from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useStore } from '../states/store';
 
 function DynamicPanel() {
+  const { timerStatus, resultsData } = useStore();
+  
+  useEffect(() => {
+    return () => {
+    }
+  }, [])
+  
+  // TODO: draw animation, players count realtime
   return (
     <div className="flex flex-col gap-1 h-full">
       <div className="cont1 bg-slate-900 h-1/4 flex flex-col w-full gap-2 p-2">
@@ -71,6 +80,9 @@ function DynamicPanel() {
       </div>
       <div className="c3 bg-slate-900 h-full flex items-center justify-center">
         {/* Add content here if needed */}
+        {(timerStatus =="payout") && <span className={"animate-bounce transition delay-150 duration-300 ease-in-out text-4xl capitalize font-extrabold"}>
+          { (resultsData) && (resultsData.result == 'high') ? <span className=' text-green-400 tracking-widest'></span>: <span className=' text-pink-500 tracking-widest'>DOWN</span> }
+          </span>}
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ import Crypto from '../crypto';
 import HLBackendV1Api from '../utils/http/api';
 
 function BettingForm() {
-  const { count, betType, userPlaceBet } = useStore();
+  const { count, betType, userPlaceBet, authUser, currentRound } = useStore();
   const [bettingAmount, setBettingAmount] = useState('');
 
   const computeBettingAmount = (e) => {
@@ -40,10 +40,9 @@ function BettingForm() {
   const submitBet = async (type) => {
     userPlaceBet(type); // TODO on success only..
     const amountToSend = bettingAmount === '' ? '0' : bettingAmount;
-
     let parameters = {
-      user_id: 'coldOne-555',
-      hl_game_id: 23,
+      user_id: authUser.uidx,
+      hl_game_id: currentRound.id,
       user_bets: type.toLowerCase() === 'up' ? 'high' : 'low',
       amount: amountToSend,
       rate: '1.75',

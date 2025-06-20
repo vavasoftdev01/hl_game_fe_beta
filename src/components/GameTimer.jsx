@@ -3,7 +3,7 @@ import { useStore } from '../states/store';
 import HLBackendV1 from '../utils/socket/HL_backend_v1';
 
 function GameTimer() {
-    const { timerStatus, setTimerStatus } = useStore();
+    const { timerStatus, setTimerStatus, setCurrentRound, setResultData } = useStore();
     const [formattedTime, setFormattedTime] = useState(null);
     const [timer, setTimer] = useState(null);
     const [progressBarWidth, setProgressBarWidth] = useState(null);
@@ -15,14 +15,25 @@ function GameTimer() {
 
         socket.on('connect', () => {
             socket.on('emitter', onFetchData);
+            socket.on('getCurrentRound', onFetchRound);
+            socket.on('getDrawResult', onFetchResult);
         });
 
         return () => {
             socket.off('connect');
             socket.off('emitter');
+            socket.off('getCurrentRound');
+            socket.off('getDrawResult');
         }
-
     }, []);
+
+    const onFetchRound = (round) => {
+        setCurrentRound(round);
+    };
+
+    const onFetchResult = (result) => {
+        setResultData(result);
+    };
 
     const onFetchData = (response) => {
         setTimerStatus(response.timer_status);

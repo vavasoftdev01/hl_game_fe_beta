@@ -25,6 +25,11 @@ export const useStore = create((set) => ({
   setTimerStatus: (newStatus) => set({ timerStatus: newStatus }),
   // RESULTS STATES
   resultsData:null, // Result socket
-  setResultData: (newResults) => set({ resultsData: newResults })
-
+  setResultData: (newResults) => set({ resultsData: newResults }),
+  // USERDATA STATES
+  authUser:null,
+  setAuthUser: (newAuth) => set({ authUser: newAuth }),
+  // GAMEROUNDDATA STATES
+  currentRound:null,
+  setCurrentRound: (newRound) => set({ currentRound: newRound  })
 }));
