@@ -15,7 +15,7 @@ function DynamicPanel() {
       <div className="cont1 bg-slate-900 h-1/4 flex flex-col w-full gap-2 p-2">
         <div className="w-full flex flex-row justify-center items-center gap-2">
         <div className="w-1/2 flex flex-col justify-center items-center">
-            <div className="bg-success h-10 w-10 flex items-center justify-center rounded-full border border-slate-600 aspect-square mb-3">
+            <div className="bg-success h-10 w-10 flex items-center justify-center rounded-full border-3 border-slate-700 aspect-square mb-3">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -46,7 +46,7 @@ function DynamicPanel() {
             </div>
           </div>
           <div className="w-1/2 flex flex-col justify-center items-center">
-            <div className="bg-secondary h-10 w-10 flex items-center justify-center rounded-full border border-slate-600 aspect-square mb-3">
+            <div className="bg-secondary h-10 w-10 flex items-center justify-center rounded-full border-3 border-slate-700 aspect-square mb-3">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

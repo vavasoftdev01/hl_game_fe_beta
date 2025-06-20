@@ -76,9 +76,10 @@ function BettingForm() {
 
       })
       .catch((error) => {
+        console.log(error.response.data.message)
         Swal.fire({
           title: 'Something went wrong!',
-          text: "There's an error on placing bet",
+          text: error.response.data.message,
           icon: 'error',
           background: '#1d293d',
           didRender: () => {
