@@ -12,6 +12,7 @@ import Loader from './assets/images/loaders/loader.gif';
 import AuthError from './assets/images/errors/auth-error.jpg';
 import HLBackendV1Api from './utils/http/api';
 import { useStore } from './states/store';
+import OptionsChart from './components/OptionsChart';
 
 // import { SingleTicker, TickerTape, AdvancedRealTimeChart, Ticker, SymbolInfo   } from "react-ts-tradingview-widgets";
 
@@ -123,7 +124,13 @@ const App = () => {
                   </div>
                   
                 </div>
-                <BBBaselineChart height={300} />
+
+
+
+                {/* <BBBaselineChart height={300} /> */}
+                <OptionsChart />
+
+
                 {/* <AdvancedRealTimeChart theme="dark" height={500} style="2" interval="1" symbol='btcusdt'></AdvancedRealTimeChart> */}
                 <div className="w-full p-5 bg-slate-900 h-1/4">
                   <BettingForm />

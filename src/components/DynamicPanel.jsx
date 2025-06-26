@@ -81,7 +81,7 @@ function DynamicPanel() {
       <div className="c3 bg-slate-900 h-full flex items-center justify-center">
         {/* Add content here if needed */}
         {(timerStatus =="payout") && <span className={"animate-bounce transition delay-150 duration-300 ease-in-out text-4xl capitalize font-extrabold"}>
-          { (resultsData) && (resultsData.result == 'high') ? <span className=' text-green-400 tracking-widest'></span>: <span className=' text-pink-500 tracking-widest'>DOWN</span> }
+          { (resultsData.result == 'high') ? <span className=' text-green-400 tracking-widest'></span>: <span className=' text-pink-500 tracking-widest'>DOWN</span> }
           </span>}
       </div>
     </div>
