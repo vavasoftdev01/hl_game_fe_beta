@@ -13,6 +13,7 @@ import AuthError from './assets/images/errors/auth-error.jpg';
 import HLBackendV1Api from './utils/http/api';
 import { useStore } from './states/store';
 import OptionsChart from './components/OptionsChart';
+import HLBackendV1 from '../src/utils/socket/HL_backend_v1';
 
 // import { SingleTicker, TickerTape, AdvancedRealTimeChart, Ticker, SymbolInfo   } from "react-ts-tradingview-widgets";
 
@@ -22,6 +23,8 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { timerStatus, authUser, setAuthUser } = useStore();
   const [isAuthUser, setIsAuthUser] = useState(false);
+  const [upWager, setUpWager] = useState("100");
+  const [downWager, setDownWager] = useState("100");
 
   const [symbols, setSymbols] = useState([
     {
@@ -58,7 +61,18 @@ const App = () => {
 
   useEffect(() => {
     getAuth();
+    console.log('====================================')
   }, []);
+
+  useEffect(() => {
+    if(timerStatus === "payout") {
+      console.log(timerStatus)
+     
+      setUpWager("100");
+      setDownWager("100");
+   
+    }
+  }, [timerStatus]);
 
 
   useEffect(() => {
@@ -67,6 +81,26 @@ const App = () => {
     }, 1000);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    const socket = HLBackendV1.getInstance('/hl_wager').getSocket();
+
+    socket.on('connect', () => {
+      socket.on('dynamic_rate', onFetchData);
+    });
+
+    return () => {
+      socket.off('connect');
+      socket.off('dynamic_rate');
+    }
+  }, []);
+
+  const onFetchData = (data) => {
+    setUpWager(data.up);
+    setDownWager(data.down);
+    console.log(data.down)
+    // console.table(data)
+  };
 
   return (
     <div className="h-auto w-full bg-gray-900 p-6 text-gray-100 font-sans drop-shadow-xl/50">
@@ -114,8 +148,10 @@ const App = () => {
               <div className="w-2/3 flex flex-col border border-solid border-slate-700 rounded-tl-lg rounded-bl-lg h-full max-sm:w-full sm:w-full">
                 <div className="flex flex-col w-full p-5 bg-transparent h-2/5">
                   <div className="w-full">
-                    <div className="text-center p-2">
+                    <div className="text-center p-2 gap-2">
+                      <span className={"text-4xl text-success font-extrabold px-3"}>{(upWager !== 0) ? upWager: 100}%</span>
                       <GameTimer />
+                      <span className={"text-4xl text-secondary font-extrabold px-3"}>{(downWager !== 0) ? downWager: 100}%</span>
                     </div>
                   </div>
                   <div className="flex flex-row w-full">

@@ -41,14 +41,14 @@ function BettingForm() {
     userPlaceBet(type); // TODO on success only..
     const amountToSend = bettingAmount === '' ? '0' : bettingAmount;
     let parameters = {
-      user_id: authUser.uidx,
+      //user_id: authUser.uidx, // can be retrieved in the be middleware
       hl_game_id: currentRound.id,
-      user_bets: type.toLowerCase() === 'up' ? 'high' : 'low',
+      user_bets: type.toLowerCase() === 'up' ? 'up' : 'down',
       amount: amountToSend,
-      rate: '1.75',
+      //rate: '1.75',
       market_id: 'hl_game',
       market_name: 'tobediscussed',
-      bets_id: type.toLowerCase() === 'up' ? 'high' : 'low',
+      bets_id: type.toLowerCase() === 'up' ? 'up' : 'down',
       bets_name: 'tobediscussed',
     };
 
