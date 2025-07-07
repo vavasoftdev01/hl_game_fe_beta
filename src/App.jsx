@@ -14,6 +14,7 @@ import HLBackendV1Api from './utils/http/api';
 import { useStore } from './states/store';
 import OptionsChart from './components/OptionsChart';
 import HLBackendV1 from '../src/utils/socket/HL_backend_v1';
+import CountUp from 'react-countup';
 
 // import { SingleTicker, TickerTape, AdvancedRealTimeChart, Ticker, SymbolInfo   } from "react-ts-tradingview-widgets";
 
@@ -21,7 +22,7 @@ const CoinGeckoMarquee = lazy(() => import('./components/CoinGeckoMarquee'));
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const { timerStatus, authUser, setAuthUser } = useStore();
+  const { timerStatus, authUser, setAuthUser, setCurrentUpBets, setCurrentDownBets, setUpTotalBets, setDownTotalBets } = useStore();
   const [isAuthUser, setIsAuthUser] = useState(false);
   const [upWager, setUpWager] = useState("100");
   const [downWager, setDownWager] = useState("100");
@@ -61,7 +62,6 @@ const App = () => {
 
   useEffect(() => {
     getAuth();
-    console.log('====================================')
   }, []);
 
   useEffect(() => {
@@ -98,7 +98,10 @@ const App = () => {
   const onFetchData = (data) => {
     setUpWager(data.up);
     setDownWager(data.down);
-    console.log(data.down)
+    setCurrentUpBets(data.upBetLists);
+    setCurrentDownBets(data.downBetLists);
+    setUpTotalBets(data.totalUpBets);
+    setDownTotalBets(data.totalDownBets);
     // console.table(data)
   };
 
@@ -149,9 +152,9 @@ const App = () => {
                 <div className="flex flex-col w-full p-5 bg-transparent h-2/5">
                   <div className="w-full">
                     <div className="text-center p-2 gap-2">
-                      <span className={"text-4xl text-success font-extrabold px-3"}>{(upWager !== 0) ? upWager: 100}%</span>
+                      <span className={"text-4xl text-success font-extrabold px-3"}><CountUp end={ (upWager !== 0) ? upWager: 100 }/>%</span>
                       <GameTimer />
-                      <span className={"text-4xl text-secondary font-extrabold px-3"}>{(downWager !== 0) ? downWager: 100}%</span>
+                      <span className={"text-4xl text-secondary font-extrabold px-3"}><CountUp end={ (downWager !== 0) ? downWager: 100 }/>%</span>
                     </div>
                   </div>
                   <div className="flex flex-row w-full">

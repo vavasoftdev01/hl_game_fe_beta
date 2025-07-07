@@ -1,13 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 import { useStore } from '../states/store';
+import CountUp from 'react-countup';
+
 
 function DynamicPanel() {
-  const { timerStatus, resultsData } = useStore();
+  const { timerStatus, resultsData, currentUpBets, currentDownBets, totalUpBets, totalDownBets } = useStore();
   
   useEffect(() => {
+    console.log(`up bets: ${currentUpBets}`)
+    console.log('=====')
+    console.log(`down bets: ${currentDownBets}`)
     return () => {
     }
-  }, [])
+  }, [currentUpBets, currentDownBets, totalUpBets, totalDownBets])
   
   // TODO: draw animation, players count realtime
   return (
@@ -35,7 +40,7 @@ function DynamicPanel() {
               <div className="flex flex-row justify-between">
                 <span>Bet</span>
                 <span className="flex items-center gap-1">
-                  $0
+                  ₩&nbsp;<CountUp end={ totalUpBets }/>
                   <div aria-label="status" className="status status-success animate-pulse"></div>
                 </span>
               </div>
@@ -64,9 +69,9 @@ function DynamicPanel() {
             </div>
             <div className="w-full rounded-t-lg border-t-3 border-solid border-secondary bg-gradient-to-b from-pink-500/20 to-transparent flex flex-col text-sm font-semibold p-2">
               <div className="flex flex-row justify-between">
-                <span>Players</span>
+                <span>Bet</span>
                 <span className="flex items-center gap-1">
-                  0
+                  ₩&nbsp;<CountUp end={ totalDownBets }/>
                   <div aria-label="status" className="status status-secondary animate-pulse"></div>
                 </span>
               </div>
@@ -78,10 +83,23 @@ function DynamicPanel() {
           </div>
         </div>
       </div>
-      <div className="c3 bg-slate-900 h-full flex items-center justify-center">
+      <div className="c3 bg-slate-900 h-full flex flex-col gap-1">
+        <div className="flex flex-row betListing-container h-full">
+          <div className="w-1/2 upBets flex flex-col gap-1 p-1">
+            { currentUpBets.map(upbet => (
+              <span className={"p-1 rounded-lg bg-gradient-to-r from-emerald-800 from-10% to-80% text-xs font-medium"}>{ upbet.user_name} ₩{ upbet.amount }</span>
+            ))}
+          </div>
+          <div className="w-1/2 upBets flex flex-col gap-1 p-1">
+            { currentDownBets.map(downbet => (
+              <span className={"p-1 rounded-lg bg-gradient-to-r from-pink-800 from-10% to-80% text-xs font-medium"}>{ downbet.user_name} ₩{ downbet.amount }</span>
+            ))}
+          </div>
+        </div>
+        
         {/* Add content here if needed */}
-        {(timerStatus =="payout") && <span className={"animate-bounce transition delay-150 duration-300 ease-in-out text-4xl capitalize font-extrabold"}>
-          { (resultsData.result == 'up') ? <span className=' text-green-400 tracking-widest'></span>: <span className=' text-pink-500 tracking-widest'>DOWN</span> }
+        {(timerStatus =="payout") && <span className={"animate-bounce transition delay-150 duration-300 ease-in-out text-2xl capitalize font-extrabold"}>
+          { (resultsData.result == 'up') ? <span className=' text-green-400 tracking-widest'>UP</span>: <span className=' text-pink-500 tracking-widest'>DOWN</span> }
           </span>}
       </div>
     </div>

@@ -5,7 +5,7 @@ import Crypto from '../crypto';
 import HLBackendV1Api from '../utils/http/api';
 
 function BettingForm() {
-  const { count, betType, userPlaceBet, authUser, currentRound } = useStore();
+  const { count, betType, userPlaceBet, authUser, currentRound, timerStatus } = useStore();
   const [bettingAmount, setBettingAmount] = useState('');
 
   const computeBettingAmount = (e) => {
@@ -38,6 +38,20 @@ function BettingForm() {
   };
 
   const submitBet = async (type) => {
+    if(timerStatus !== "betting_open") {
+      Swal.fire({
+        title: "",
+        text: `${currentRound.id} 회차는 마감되었습니다.`,
+        icon: 'error',
+        background: '#1d293d',
+        didRender: () => {
+          Swal.getTitle().style.color = '#b6c2cf';
+          Swal.getHtmlContainer().style.color = '#b6c2cf';
+        },
+      });
+      return;
+    }
+
     userPlaceBet(type); // TODO on success only..
     const amountToSend = bettingAmount === '' ? '0' : bettingAmount;
     let parameters = {
@@ -62,10 +76,11 @@ function BettingForm() {
       .then((response) => {
         const isError = response.data.statusCode < 200 || response.data.statusCode > 299;
         Swal.fire({
-          title: isError ? (response.data?.message || 'An error occurred') : 'Bet has been placed!',
-          text: isError ? 'Please try again later!' : 'Goodluck!',
+          title: isError ? (response.data?.message || '오류') : '베팅이 완료되었습니다',
+          text: isError ? 'Please try again later!' : '행운을 빌어요',
           icon: isError ? 'error' : 'success',
           background: '#1d293d',
+          timer: 1000,
           didRender: () => {
             Swal.getTitle().style.color = '#b6c2cf';
             Swal.getHtmlContainer().style.color = '#b6c2cf';

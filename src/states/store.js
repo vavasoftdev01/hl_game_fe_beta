@@ -31,5 +31,14 @@ export const useStore = create((set) => ({
   setAuthUser: (newAuth) => set({ authUser: newAuth }),
   // GAMEROUNDDATA STATES
   currentRound:null,
-  setCurrentRound: (newRound) => set({ currentRound: newRound  })
+  setCurrentRound: (newRound) => set({ currentRound: newRound  }),
+  // DYNAMIC RATE STATES
+  currentUpBets: null,
+  currentDownBets: null,
+  totalUpBets: 0,
+  totalDownBets: 0,
+  setCurrentUpBets: (newUpBets) => set({ currentUpBets: newUpBets }),
+  setCurrentDownBets: (newDownBets) => set({ currentDownBets: newDownBets }),
+  setUpTotalBets: (newTotalUpBets) => set({ totalUpBets: newTotalUpBets}),
+  setDownTotalBets: (newTotalDownBets) => set({ totalDownBets: newTotalDownBets}),
 }));
