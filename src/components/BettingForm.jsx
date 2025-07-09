@@ -3,10 +3,27 @@ import { useStore } from './../states/store';
 import Swal from 'sweetalert2';
 import Crypto from '../crypto';
 import HLBackendV1Api from '../utils/http/api';
+import { ToastContainer, toast, Bounce } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; 
+
 
 function BettingForm() {
   const { count, betType, userPlaceBet, authUser, currentRound, timerStatus } = useStore();
   const [bettingAmount, setBettingAmount] = useState('');
+
+  const customToastClasses = `
+  .custom-toast-background {
+    background-color: #2d3748 !important; /* Dark gray background */
+    color: #edf2f7 !important; /* Light text color */
+    border-radius: 0.5rem !important; /* Rounded corners */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important; /* Subtle shadow */
+  }
+
+  /* Optional: Style for progress bar if you want it to match */
+  .Toastify__progress-bar--default {
+    background: linear-gradient(to right, #4299e1, #805ad5) !important; /* Blue to purple gradient */
+  }
+`;
 
   const computeBettingAmount = (e) => {
     const value = e.target.value;
@@ -55,15 +72,10 @@ function BettingForm() {
     userPlaceBet(type); // TODO on success only..
     const amountToSend = bettingAmount === '' ? '0' : bettingAmount;
     let parameters = {
-      //user_id: authUser.uidx, // can be retrieved in the be middleware
-      hl_game_id: currentRound.id,
+      ud_game_id: currentRound.id,
       user_bets: type.toLowerCase() === 'up' ? 'up' : 'down',
       amount: amountToSend,
-      //rate: '1.75',
-      market_id: 'hl_game',
-      market_name: 'tobediscussed',
       bets_id: type.toLowerCase() === 'up' ? 'up' : 'down',
-      bets_name: 'tobediscussed',
     };
 
     if(+process.env.ALLOWED_ENCRYPTION_DECRYPTION === 1) {
@@ -75,19 +87,21 @@ function BettingForm() {
       .post(`${process.env.BACKEND_API_URL}/betting-management/createUserBet`, parameters)
       .then((response) => {
         const isError = response.data.statusCode < 200 || response.data.statusCode > 299;
-        Swal.fire({
-          title: isError ? (response.data?.message || '오류') : '베팅이 완료되었습니다',
-          text: isError ? 'Please try again later!' : '행운을 빌어요',
-          icon: isError ? 'error' : 'success',
-          background: '#1d293d',
-          timer: 1000,
-          didRender: () => {
-            Swal.getTitle().style.color = '#b6c2cf';
-            Swal.getHtmlContainer().style.color = '#b6c2cf';
-          },
-        });
+        // Swal.fire({
+        //   title: isError ? (response.data?.message || '오류') : '베팅이 완료되었습니다',
+        //   text: isError ? 'Please try again later!' : '행운을 빌어요',
+        //   icon: isError ? 'error' : 'success',
+        //   background: '#1d293d',
+        //   timer: 1000,
+        //   didRender: () => {
+        //     Swal.getTitle().style.color = '#b6c2cf';
+        //     Swal.getHtmlContainer().style.color = '#b6c2cf';
+        //   },
+        // });
 
         (!isError) && setBettingAmount('');  
+
+        toast.success('Bet has been placed');
 
       })
       .catch((error) => {
@@ -108,6 +122,7 @@ function BettingForm() {
 
   return (
     <div className="flex flex-col gap-2 bg-slate-800 border border-solid border-slate-700 rounded-lg p-5 fill-white drop-shadow-xl/50 font-xs overflow-x-scroll">
+      <style>{customToastClasses}</style>
       <div className="gap-2 rounded-md flex flex-row max-w-full text-sm max-sm:flex-col sm:max-lg:flex-col">
         <div className="input-cont w-1/2 flex flex-col text-slate-400 font-medium max-sm:w-full">
           <span className="p-1">High or Low?</span>
@@ -255,6 +270,14 @@ function BettingForm() {
           <span className="text-white">DOWN</span>
         </button>
       </div>
+      <ToastContainer
+          position="bottom-left"
+          theme="dark"
+          autoClose={400}
+          transition={Bounce}
+          hideProgressBar={true}
+          toastClassName="custom-toast-background"
+      />
     </div>
   );
 }

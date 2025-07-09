@@ -4,7 +4,11 @@ import CountUp from 'react-countup';
 
 
 function DynamicPanel() {
-  const { timerStatus, resultsData, currentUpBets, currentDownBets, totalUpBets, totalDownBets } = useStore();
+  const { timerStatus, resultsData, currentUpBets, currentDownBets, totalUpBets, totalDownBets,  currentUpWager, currentDownWager } = useStore();
+  const winningUp = useRef(0);
+  const winningDown = useRef(0);
+  const totalUpBetsRef = useRef(0);
+  const totalDownBetsRef = useRef(0);
   
   useEffect(() => {
     console.log(`up bets: ${currentUpBets}`)
@@ -12,7 +16,24 @@ function DynamicPanel() {
     console.log(`down bets: ${currentDownBets}`)
     return () => {
     }
-  }, [currentUpBets, currentDownBets, totalUpBets, totalDownBets])
+  }, [currentUpBets, currentDownBets, totalUpBets, totalDownBets]);
+
+  useEffect(() => {
+    let assumedUpWinnings = 0;
+    let assumedDownWinnings = 0;
+    
+    if(timerStatus == "draw") {
+      let upRate = currentUpWager / 100;
+      assumedUpWinnings = totalUpBets * upRate
+      winningUp.current = totalUpBets * upRate;
+      totalUpBetsRef.current = +totalUpBets;
+
+      let downRate = currentDownWager / 100;
+      assumedDownWinnings = totalUpBets * downRate
+      winningDown.current = totalUpBets * downRate;
+      totalDownBetsRef.current = +totalDownBets;
+    }
+  }, [timerStatus]);
   
   // TODO: draw animation, players count realtime
   return (
@@ -84,23 +105,49 @@ function DynamicPanel() {
         </div>
       </div>
       <div className="c3 bg-slate-900 h-full flex flex-col gap-1">
-        <div className="flex flex-row betListing-container h-full">
-          <div className="w-1/2 upBets flex flex-col gap-1 p-1">
-            { currentUpBets.map(upbet => (
-              <span className={"p-1 rounded-lg bg-gradient-to-r from-emerald-800 from-10% to-80% text-xs font-medium"}>{ upbet.user_name} ₩{ upbet.amount }</span>
+        <div className={"flex flex-row betListing-container "+(timerStatus !== "payout" ? "transition-all delay-1000 duration-1000 ease-linear opacity-100 h-[50%] ": "transition-all delay-1000 duration-1000 ease-linear opacity-0 h-[0.1%] ") }>
+          <div className={"w-1/2 upBets flex flex-col gap-1.5 p-1 "}>
+            { (timerStatus !== "payout") && currentUpBets.map(upbet => (
+              <span className={"p-1 rounded-lg bg-gradient-to-r from-emerald-800 from-10% to-80% text-xs font-medium"}>{ upbet.user_name} ₩&nbsp;{ upbet.amount }</span>
             ))}
+            { timerStatus == "payout" && <h1 className={"text-2xl capitalize font-extrabold text-green-400 tracking-widest text-center"}>{(resultsData.result == "up") ? "WINNER": "LOSER"}</h1>}
           </div>
-          <div className="w-1/2 upBets flex flex-col gap-1 p-1">
-            { currentDownBets.map(downbet => (
-              <span className={"p-1 rounded-lg bg-gradient-to-r from-pink-800 from-10% to-80% text-xs font-medium"}>{ downbet.user_name} ₩{ downbet.amount }</span>
+
+          <div className={"w-1/2 upBets flex flex-col gap-1 p-1"}>
+            { (timerStatus !== "payout") && currentDownBets.map(downbet => (
+              <span className={"p-1 rounded-lg bg-gradient-to-r from-pink-800 from-10% to-80% text-xs font-medium"}>{ downbet.user_name} ₩&nbsp;{ downbet.amount }</span>
             ))}
+            { timerStatus == "payout" && <h1 className={"text-2xl capitalize font-extrabold text-pink-500 tracking-widest text-center"}>{(resultsData.result == "down") ? "WINNER": "LOSER"}</h1>}
           </div>
+
         </div>
-        
-        {/* Add content here if needed */}
-        {(timerStatus =="payout") && <span className={"animate-bounce transition delay-150 duration-300 ease-in-out text-2xl capitalize font-extrabold"}>
-          { (resultsData.result == 'up') ? <span className=' text-green-400 tracking-widest'>UP</span>: <span className=' text-pink-500 tracking-widest'>DOWN</span> }
-          </span>}
+        { timerStatus == "payout" && 
+          <div className={`h-[50%] flex items-center justify-center text-2xl font-extrabold capitalize ${
+              timerStatus === "payout" && resultsData && resultsData.result === "up"
+                ? "bg-gradient-to-b from-green-500/20 to-transparent"
+                : "bg-gradient-to-b from-pink-500/20 to-transparent"
+            }`}
+          >
+            {timerStatus === "payout" && resultsData && (
+              <div className="">
+                {resultsData.result === "up" ? (
+                  <div className="text-green-400 tracking-widest text-center flex flex-col gap-3">
+                    {/* TODO // Players count */}
+                    <span>1</span>
+                    <span>UP</span>
+                    <span><CountUp start={ totalUpBetsRef.current } delay={2} duration={0.8} end={ totalUpBetsRef.current + winningUp.current } /></span>
+                  </div>
+                ) : (
+                  <div className="text-pink-500 tracking-widest text-center flex flex-col justify-center align-middle">
+                    <span>1</span>
+                    <span>DOWN</span>
+                    <span><CountUp start={totalDownBetsRef.current } delay={2} duration={0.8} end={ totalDownBetsRef.current + winningDown.current } /></span> 
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        }
       </div>
     </div>
   );

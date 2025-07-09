@@ -37,8 +37,12 @@ export const useStore = create((set) => ({
   currentDownBets: null,
   totalUpBets: 0,
   totalDownBets: 0,
+  currentUpWager: 0,
+  currentDownWager: 0,
   setCurrentUpBets: (newUpBets) => set({ currentUpBets: newUpBets }),
   setCurrentDownBets: (newDownBets) => set({ currentDownBets: newDownBets }),
   setUpTotalBets: (newTotalUpBets) => set({ totalUpBets: newTotalUpBets}),
   setDownTotalBets: (newTotalDownBets) => set({ totalDownBets: newTotalDownBets}),
+  setCurrentUpWager: (newCurrentUpWager) => set({ currentUpWager: newCurrentUpWager}),
+  setCurrentDownWager: (newCurrentDownWager) => set({ currentDownWager: newCurrentDownWager}),
 }));

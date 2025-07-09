@@ -22,7 +22,7 @@ const CoinGeckoMarquee = lazy(() => import('./components/CoinGeckoMarquee'));
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const { timerStatus, authUser, setAuthUser, setCurrentUpBets, setCurrentDownBets, setUpTotalBets, setDownTotalBets } = useStore();
+  const { timerStatus, authUser, setAuthUser, setCurrentUpBets, setCurrentDownBets, setUpTotalBets, setDownTotalBets, setCurrentUpWager, setCurrentDownWager } = useStore();
   const [isAuthUser, setIsAuthUser] = useState(false);
   const [upWager, setUpWager] = useState("100");
   const [downWager, setDownWager] = useState("100");
@@ -65,9 +65,12 @@ const App = () => {
   }, []);
 
   useEffect(() => {
+    if(timerStatus === "draw") {
+      setCurrentUpWager(upWager);
+      setCurrentDownWager(downWager);
+    }
+    
     if(timerStatus === "payout") {
-      console.log(timerStatus)
-     
       setUpWager("100");
       setDownWager("100");
    
@@ -152,9 +155,9 @@ const App = () => {
                 <div className="flex flex-col w-full p-5 bg-transparent h-2/5">
                   <div className="w-full">
                     <div className="text-center p-2 gap-2">
-                      <span className={"text-4xl text-success font-extrabold px-3"}><CountUp end={ (upWager !== 0) ? upWager: 100 }/>%</span>
+                      <span className={"text-4xl text-success font-extrabold px-3"}> { (upWager !== 0) ? upWager: 100 }%</span>
                       <GameTimer />
-                      <span className={"text-4xl text-secondary font-extrabold px-3"}><CountUp end={ (downWager !== 0) ? downWager: 100 }/>%</span>
+                      <span className={"text-4xl text-secondary font-extrabold px-3"}>{ (downWager !== 0) ? downWager: 100 }%</span>
                     </div>
                   </div>
                   <div className="flex flex-row w-full">
