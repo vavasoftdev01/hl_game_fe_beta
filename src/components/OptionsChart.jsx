@@ -127,7 +127,7 @@ const OptionsChart = ({ height = 400, className = '' }) => {
 
     const validChartData = chartData.filter(d => typeof d.time === 'number' && !isNaN(d.time) && typeof d.value === 'number' && !isNaN(d.value));
     const uniqueValidData = [...new Map(validChartData.map(item => [item.time, item])).values()].sort((a, b) => a.time - b.time);
-    console.log('Updated data:', uniqueValidData);
+    //console.log('Updated data:', uniqueValidData);
 
     lineSeries.current.setData(uniqueValidData);
   }, [chartData, isInitialized, chartInstance, lineSeries]);

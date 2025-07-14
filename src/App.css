@@ -24,3 +24,48 @@
     width: calc(100% / 5 - 0.5rem); /* 5 buttons per row on medium screens */
   }
 }
+
+/* Dynamic Panel */
+@keyframes slideInFromLeft {
+  0% { transform: translateX(-100%); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+.animate-slide-in-left {
+  animation: slideInFromLeft 0.1s ease-in forwards;
+}
+
+@keyframes slideInFromRight {
+  0% { transform: translateX(100%); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+.animate-slide-in-right {
+  animation: slideInFromRight 0.1s ease-in forwards;
+}
+
+/* Define the keyframes for the zoom in/out and fade-in animation */
+@keyframes zoomInThenOut {
+    0% {
+      opacity: 0;
+      transform: scale(0.8); /* Start smaller and invisible */
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.1); /* Zoom slightly larger than final size, fully visible */
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1); /* Settle back to original size, fully visible */
+    }
+}
+
+/* Apply the animation using a custom class */
+.animate-on-load {
+  animation: zoomInThenOut 0.5s ease-in-out forwards; /* Name, duration, timing, fill-mode */
+    /*
+      * `forwards` ensures the element stays in its final animated state
+      * after the animation completes.
+      * `ease-in-out` provides a smooth acceleration and deceleration.
+      */
+}
+
+

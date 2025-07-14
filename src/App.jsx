@@ -15,6 +15,7 @@ import { useStore } from './states/store';
 import OptionsChart from './components/OptionsChart';
 import HLBackendV1 from '../src/utils/socket/HL_backend_v1';
 import CountUp from 'react-countup';
+import ResultPanel from './components/ResultPanel';
 
 // import { SingleTicker, TickerTape, AdvancedRealTimeChart, Ticker, SymbolInfo   } from "react-ts-tradingview-widgets";
 
@@ -22,7 +23,7 @@ const CoinGeckoMarquee = lazy(() => import('./components/CoinGeckoMarquee'));
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const { timerStatus, authUser, setAuthUser, setCurrentUpBets, setCurrentDownBets, setUpTotalBets, setDownTotalBets, setCurrentUpWager, setCurrentDownWager } = useStore();
+  const { timerStatus, authUser, setAuthUser, setCurrentUpBets, setCurrentDownBets, setUpTotalBets, setDownTotalBets, setCurrentUpWager, setCurrentDownWager, setAllBets } = useStore();
   const [isAuthUser, setIsAuthUser] = useState(false);
   const [upWager, setUpWager] = useState("100");
   const [downWager, setDownWager] = useState("100");
@@ -105,6 +106,7 @@ const App = () => {
     setCurrentDownBets(data.downBetLists);
     setUpTotalBets(data.totalUpBets);
     setDownTotalBets(data.totalDownBets);
+    setAllBets(data.betLists)
     // console.table(data)
   };
 
@@ -167,11 +169,14 @@ const App = () => {
                   
                 </div>
 
-
-
-                {/* <BBBaselineChart height={300} /> */}
-                <OptionsChart />
-
+                
+                <div className="relative">
+                  <div className={"w-full bg-blend-darken absolute z-20 "}><ResultPanel /></div>
+                  <div className='w-full'>
+                    <OptionsChart />
+                    {/* <BBBaselineChart height={300} /> */}
+                  </div>
+                </div>
 
                 {/* <AdvancedRealTimeChart theme="dark" height={500} style="2" interval="1" symbol='btcusdt'></AdvancedRealTimeChart> */}
                 <div className="w-full p-5 bg-slate-900 h-1/4">

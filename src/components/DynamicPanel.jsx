@@ -1,19 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
 import { useStore } from '../states/store';
 import CountUp from 'react-countup';
+import HLBackendV1Api from '../utils/http/api';
 
 
 function DynamicPanel() {
-  const { timerStatus, resultsData, currentUpBets, currentDownBets, totalUpBets, totalDownBets,  currentUpWager, currentDownWager } = useStore();
+  const { timerStatus, resultsData, currentUpBets, currentDownBets, totalUpBets, totalDownBets,  currentUpWager, currentDownWager, currentRound, allBets } = useStore();
   const winningUp = useRef(0);
   const winningDown = useRef(0);
   const totalUpBetsRef = useRef(0);
   const totalDownBetsRef = useRef(0);
   
   useEffect(() => {
-    console.log(`up bets: ${currentUpBets}`)
-    console.log('=====')
-    console.log(`down bets: ${currentDownBets}`)
+    // console.log(`up bets: ${currentUpBets}`)
+    // console.log('=====')
+    // console.log(`down bets: ${currentDownBets}`)
+    console.log(allBets)
     return () => {
     }
   }, [currentUpBets, currentDownBets, totalUpBets, totalDownBets]);
@@ -34,6 +36,19 @@ function DynamicPanel() {
       totalDownBetsRef.current = +totalDownBets;
     }
   }, [timerStatus]);
+
+  const fetchUserResult = async () => {
+    try {
+      await HLBackendV1Api
+      .post(`${process.env.BACKEND_API_URL}/betting-management/get-user-result`, { _id: currentRound.id })
+        .then((response) => {
+          console.log(response.data)
+        })
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
   
   // TODO: draw animation, players count realtime
   return (
@@ -108,14 +123,14 @@ function DynamicPanel() {
         <div className={"flex flex-row betListing-container "+(timerStatus !== "payout" ? "transition-all delay-1000 duration-1000 ease-linear opacity-100 h-[50%] ": "transition-all delay-1000 duration-1000 ease-linear opacity-0 h-[0.1%] ") }>
           <div className={"w-1/2 upBets flex flex-col gap-1.5 p-1 "}>
             { (timerStatus !== "payout") && currentUpBets.map(upbet => (
-              <span className={"p-1 rounded-lg bg-gradient-to-r from-emerald-800 from-10% to-80% text-xs font-medium"}>{ upbet.user_name} ₩&nbsp;{ upbet.amount }</span>
+              <span className={"animate-slide-in-right p-1 rounded-lg bg-gradient-to-r from-emerald-800 from-10% to-80% text-xs font-medium"}>{ upbet.user_name} ₩&nbsp;{ upbet.amount }</span>
             ))}
             { timerStatus == "payout" && <h1 className={"text-2xl capitalize font-extrabold text-green-400 tracking-widest text-center"}>{(resultsData.result == "up") ? "WINNER": "LOSER"}</h1>}
           </div>
 
           <div className={"w-1/2 upBets flex flex-col gap-1 p-1"}>
             { (timerStatus !== "payout") && currentDownBets.map(downbet => (
-              <span className={"p-1 rounded-lg bg-gradient-to-r from-pink-800 from-10% to-80% text-xs font-medium"}>{ downbet.user_name} ₩&nbsp;{ downbet.amount }</span>
+              <span className={"animate-slide-in-left p-1 rounded-lg bg-gradient-to-r from-pink-800 from-10% to-80% text-xs font-medium"}>{ downbet.user_name} ₩&nbsp;{ downbet.amount }</span>
             ))}
             { timerStatus == "payout" && <h1 className={"text-2xl capitalize font-extrabold text-pink-500 tracking-widest text-center"}>{(resultsData.result == "down") ? "WINNER": "LOSER"}</h1>}
           </div>
@@ -135,13 +150,13 @@ function DynamicPanel() {
                     {/* TODO // Players count */}
                     <span>1</span>
                     <span>UP</span>
-                    <span><CountUp start={ totalUpBetsRef.current } delay={2} duration={0.8} end={ totalUpBetsRef.current + winningUp.current } /></span>
+                    <span><CountUp delay={2} duration={0.8} end={ winningUp.current } /></span>
                   </div>
                 ) : (
                   <div className="text-pink-500 tracking-widest text-center flex flex-col justify-center align-middle">
                     <span>1</span>
                     <span>DOWN</span>
-                    <span><CountUp start={totalDownBetsRef.current } delay={2} duration={0.8} end={ totalDownBetsRef.current + winningDown.current } /></span> 
+                    <span><CountUp delay={2} duration={0.8} end={ winningDown.current } /></span> 
                   </div>
                 )}
               </div>

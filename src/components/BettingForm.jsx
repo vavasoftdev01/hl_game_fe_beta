@@ -125,7 +125,11 @@ function BettingForm() {
       <style>{customToastClasses}</style>
       <div className="gap-2 rounded-md flex flex-row max-w-full text-sm max-sm:flex-col sm:max-lg:flex-col">
         <div className="input-cont w-1/2 flex flex-col text-slate-400 font-medium max-sm:w-full">
-          <span className="p-1">High or Low?</span>
+          
+          <div className={"flex flex-row p-1"}>
+            <span className="w-full">High or Low?</span>
+            <span className="w-full">Balance: ₩ { (authUser) ? authUser.balance.toLocaleString(): 0 }</span>
+            </div>
           <div className="flex flex-row gap-1 w-full max-sm:flex-col-reverse">
             <button
               className="group btn btn-primary max-sm:btn-lg sm:max-lg:btn-lg"
