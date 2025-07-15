@@ -23,7 +23,7 @@ const CoinGeckoMarquee = lazy(() => import('./components/CoinGeckoMarquee'));
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const { timerStatus, authUser, setAuthUser, setCurrentUpBets, setCurrentDownBets, setUpTotalBets, setDownTotalBets, setCurrentUpWager, setCurrentDownWager, setAllBets } = useStore();
+  const { timerStatus, authUser, setAuthUser, setCurrentUpBets, setCurrentDownBets, setUpTotalBets, setDownTotalBets, setCurrentUpWager, setCurrentDownWager } = useStore();
   const [isAuthUser, setIsAuthUser] = useState(false);
   const [upWager, setUpWager] = useState("100");
   const [downWager, setDownWager] = useState("100");
@@ -106,7 +106,6 @@ const App = () => {
     setCurrentDownBets(data.downBetLists);
     setUpTotalBets(data.totalUpBets);
     setDownTotalBets(data.totalDownBets);
-    setAllBets(data.betLists)
     // console.table(data)
   };
 

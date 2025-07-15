@@ -5,7 +5,7 @@ import HLBackendV1Api from '../utils/http/api';
 
 
 function DynamicPanel() {
-  const { timerStatus, resultsData, currentUpBets, currentDownBets, totalUpBets, totalDownBets,  currentUpWager, currentDownWager, currentRound, allBets } = useStore();
+  const { timerStatus, resultsData, currentUpBets, currentDownBets, totalUpBets, totalDownBets,  currentUpWager, currentDownWager, currentRound } = useStore();
   const winningUp = useRef(0);
   const winningDown = useRef(0);
   const totalUpBetsRef = useRef(0);
@@ -15,7 +15,7 @@ function DynamicPanel() {
     // console.log(`up bets: ${currentUpBets}`)
     // console.log('=====')
     // console.log(`down bets: ${currentDownBets}`)
-    console.log(allBets)
+    
     return () => {
     }
   }, [currentUpBets, currentDownBets, totalUpBets, totalDownBets]);
@@ -123,14 +123,14 @@ function DynamicPanel() {
         <div className={"flex flex-row betListing-container "+(timerStatus !== "payout" ? "transition-all delay-1000 duration-1000 ease-linear opacity-100 h-[50%] ": "transition-all delay-1000 duration-1000 ease-linear opacity-0 h-[0.1%] ") }>
           <div className={"w-1/2 upBets flex flex-col gap-1.5 p-1 "}>
             { (timerStatus !== "payout") && currentUpBets.map(upbet => (
-              <span className={"animate-slide-in-right p-1 rounded-lg bg-gradient-to-r from-emerald-800 from-10% to-80% text-xs font-medium"}>{ upbet.user_name} ₩&nbsp;{ upbet.amount }</span>
+              <span className={"animate-slide-in-right p-1 rounded-lg bg-gradient-to-r from-emerald-800 from-10% to-80% text-xs font-medium"}>{ upbet.user_name} ₩&nbsp;<CountUp end={ upbet.total_bets }/></span>
             ))}
             { timerStatus == "payout" && <h1 className={"text-2xl capitalize font-extrabold text-green-400 tracking-widest text-center"}>{(resultsData.result == "up") ? "WINNER": "LOSER"}</h1>}
           </div>
 
           <div className={"w-1/2 upBets flex flex-col gap-1 p-1"}>
             { (timerStatus !== "payout") && currentDownBets.map(downbet => (
-              <span className={"animate-slide-in-left p-1 rounded-lg bg-gradient-to-r from-pink-800 from-10% to-80% text-xs font-medium"}>{ downbet.user_name} ₩&nbsp;{ downbet.amount }</span>
+              <span className={"animate-slide-in-left p-1 rounded-lg bg-gradient-to-r from-pink-800 from-10% to-80% text-xs font-medium"}>{ downbet.user_name} ₩&nbsp;<CountUp end={ downbet.total_bets }/> </span>
             ))}
             { timerStatus == "payout" && <h1 className={"text-2xl capitalize font-extrabold text-pink-500 tracking-widest text-center"}>{(resultsData.result == "down") ? "WINNER": "LOSER"}</h1>}
           </div>
