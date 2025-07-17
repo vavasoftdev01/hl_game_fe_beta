@@ -132,7 +132,7 @@ const App = () => {
             </div>
           }
         >
-          {(isAuthUser) && <div className="flex flex-col gap-1 max-h-[100%] max-w-[1680px] mx-auto max-sm:bg-pink-600 sm:max-lg:bg-cyan-400 lg:max-xl:bg-yellow-300 xl:max-2xl:bg-indigo-800 2xl:bg-stone-300">
+          {(isAuthUser) && <div className="flex flex-col gap-1 max-h-[100%] max-w-[1680px] mx-auto">
             <div className="w-full">
               <div className="tradingview-widget-container text-red-300">
                 {/* <SingleTicker
@@ -157,7 +157,7 @@ const App = () => {
               <div className="w-2/3 flex flex-col border border-solid border-slate-700 rounded-tl-lg rounded-bl-lg h-full max-sm:w-full sm:w-full">
                 <div className="flex flex-col w-full p-2 bg-transparent h-2/5 ">
                   <div className="w-full">
-                    <div className="flex flex-row text-center p-2 gap-2 bg-slate-800">
+                    <div className="flex flex-row text-center gap-2 bg-slate-900">
                       <div className={"w-full left-pane flex flex-col text-left font-light text-sm"}>
                         <span className={"up-inv"}>Your Investment</span>
                         <span className={"up-inv-val font-extrabold text-success"}>₩ 69</span>

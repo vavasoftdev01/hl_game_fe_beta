@@ -11,6 +11,7 @@ const OptionsChart = ({ height = 400, className = '' }) => {
   const socketRef = useRef(null);
   const lastUpdateTime = useRef(0);
   const lastTimestamp = useRef(0);
+   const resizeObserver = useRef<ResizeObserver | null>(null);
 
   const websocketCryptoUrl = process.env.HL_CRYPTO_v1_WS_SERVER;
   const apiCryptoUrl = process.env.HL_API_v1_SERVER;
@@ -74,6 +75,20 @@ const OptionsChart = ({ height = 400, className = '' }) => {
         console.error('Chart initialization error:', error);
       }
 
+      //
+      // Set up resize observer
+      resizeObserver.current = new ResizeObserver((entries) => {
+        if (entries[0] && chartInstance.current) {
+          const { width, height } = entries[0].contentRect;
+          chartInstance.current.resize(width, height);
+        }
+      });
+
+      if (chartRef.current) {
+        resizeObserver.current.observe(chartRef.current);
+      }
+      //
+
       return () => {
         if (chartInstance.current) {
           chartInstance.current.remove();
@@ -81,6 +96,13 @@ const OptionsChart = ({ height = 400, className = '' }) => {
           lineSeries.current = null;
           isInitialized.current = false;
         }
+
+        //
+        if (resizeObserver.current && chartRef.current) {
+          resizeObserver.current.unobserve(chartRef.current);
+          resizeObserver.current.disconnect();
+        }
+        //
       };
     }
   }, []);
@@ -188,8 +210,12 @@ const OptionsChart = ({ height = 400, className = '' }) => {
   }, [isInitialized, chartInstance, lineSeries]);
 
   return (
-    <div>
-      <div ref={chartRef} className={className} style={{ height }} />
+    <div className="w-full max-w-full overflow-hidden">
+      <div
+        ref={chartRef}
+        className={`w-full ${className}`}
+        style={{ height }}
+      />
     </div>
   );
 };
