@@ -11,10 +11,21 @@ const OptionsChart = ({ height = 400, className = '' }) => {
   const socketRef = useRef(null);
   const lastUpdateTime = useRef(0);
   const lastTimestamp = useRef(0);
-   const resizeObserver = useRef<ResizeObserver | null>(null);
+ const lastWidth = useRef<number | null>(null); // Track last width to avoid unnecessary resizes
 
   const websocketCryptoUrl = process.env.HL_CRYPTO_v1_WS_SERVER;
   const apiCryptoUrl = process.env.HL_API_v1_SERVER;
+
+  // Responsiveness
+  const resize = () => {
+    if (chartInstance.current && chartRef.current) {
+      const newWidth = chartRef.current.offsetWidth;
+      if (lastWidth.current !== newWidth) {
+        chartInstance.current.resize(newWidth, height);
+        lastWidth.current = newWidth;
+      }
+    }
+  };
 
   useEffect(() => {
     if (chartRef.current && !isInitialized.current) {
@@ -75,18 +86,9 @@ const OptionsChart = ({ height = 400, className = '' }) => {
         console.error('Chart initialization error:', error);
       }
 
-      //
-      // Set up resize observer
-      resizeObserver.current = new ResizeObserver((entries) => {
-        if (entries[0] && chartInstance.current) {
-          const { width, height } = entries[0].contentRect;
-          chartInstance.current.resize(width, height);
-        }
-      });
-
-      if (chartRef.current) {
-        resizeObserver.current.observe(chartRef.current);
-      }
+      // Responsiveness
+      window.addEventListener('resize', resize);
+      lastWidth.current = chartRef.current.offsetWidth; // Initialize last width
       //
 
       return () => {
@@ -97,11 +99,8 @@ const OptionsChart = ({ height = 400, className = '' }) => {
           isInitialized.current = false;
         }
 
-        //
-        if (resizeObserver.current && chartRef.current) {
-          resizeObserver.current.unobserve(chartRef.current);
-          resizeObserver.current.disconnect();
-        }
+        // Responsiveness
+        window.removeEventListener('resize', resize);
         //
       };
     }

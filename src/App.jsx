@@ -112,7 +112,7 @@ const App = () => {
   };
 
   return (
-    <div className="h-auto w-full bg-gray-900 p-6 text-gray-100 font-sans drop-shadow-xl/50">
+    <div className="h-auto w-full bg-gray-900 p-6 text-gray-100 font-sans drop-shadow-xl/50 max-sm:w-dvw">
       {/* <h1 className="text-2xl font-bold text-cyan-400 mb-4 hover:text-cyan-300 transition-colors duration-300">
         KBCGAME Trading Dashboard
       </h1> */}
@@ -158,7 +158,7 @@ const App = () => {
                 <div className="flex flex-col w-full p-2 bg-transparent h-2/5 ">
                   <div className="w-full">
                     <div className="flex flex-row text-center gap-2 bg-slate-900">
-                      <div className={"w-full left-pane flex flex-col text-left font-light text-sm"}>
+                      <div className={"w-full left-pane flex flex-col text-left font-light text-sm max-sm:hidden"}>
                         <span className={"up-inv"}>Your Investment</span>
                         <span className={"up-inv-val font-extrabold text-success"}>₩ 69</span>
                         <span className={"up-poten-ret"}>Potential Return</span>
@@ -176,15 +176,15 @@ const App = () => {
                         {/* <div className={"text-4xl text-secondary font-extrabold px-3 w-full"}>
                           { (downWager !== 0) ? downWager: 100 }%
                         </div> */}
-                        <div className={"flex flex-col down-wager px-3 w-full place-items-center gap-2"}>
-                          <span className='rounded-full bg-gradient-to-b from-pink-500/20 to-transparent text-secondary text-xs font-medium w-3/5 p-0 mx-0'>Down wins</span>
+                        <div className={"flex flex-col down-wager px-3 w-full place-items-center gap-2 "}>
+                          <span className='rounded-full bg-gradient-to-b from-pink-500/20 to-transparent text-secondary text-xs font-medium w-full p-0 mx-0'>Down wins</span>
                           <div className="downwager-cont text-4xl text-secondary font-extrabold">
                             { (downWager !== 0) ? downWager: 100 }%
                           </div>
                         </div>
                       </div>
 
-                      <div className={"w-full right-pane flex flex-col text-right font-light text-sm"}>
+                      <div className={"w-full right-pane flex flex-col text-right font-light text-sm max-sm:hidden"}>
                         <span className={"down-inv"}>Your Investment</span>
                         <span className={"down-inv-val font-extrabold text-secondary"}>₩ 69</span>
                         <span className={"down-poten-ret"}>Potential Return</span>
@@ -229,12 +229,19 @@ const App = () => {
                   </div>
                 </div>
 
+                {/* Dynamic panel xs,sm layout */}
+                <div className="w-full bg-slate-900 h-1/4 max-sm:visible sm:max-lg:visible lg:max-xl:visible xl:max-2xl:hidden 2xl:hidden max-sm:bg-pink-600 sm:max-lg:bg-cyan-400 lg:max-xl:bg-yellow-300 xl:max-2xl:bg-indigo-800 2xl:bg-stone-300">
+                  <DynamicPanel />
+                </div>
+
                 {/* <AdvancedRealTimeChart theme="dark" height={500} style="2" interval="1" symbol='btcusdt'></AdvancedRealTimeChart> */}
                 <div className="w-full p-5 bg-slate-900 h-1/4">
                   <BettingForm />
                 </div>
               </div>
-              <div className="w-1/3 bg-slate-800 border border-solid border-slate-700 rounded-tr-lg max-sm:hidden sm:max-lg:hidden overflow-x-hidden">
+
+              {/* Col 2 */}
+              <div className="w-1/3 bg-slate-800 border border-solid border-slate-700 rounded-tr-lg max-sm:hidden sm:max-lg:hidden lg:max-xl:hidden xl:max-2xl:visible 2xl:visible overflow-x-hidden">
                 <DynamicPanel />
               </div>
             </div>
