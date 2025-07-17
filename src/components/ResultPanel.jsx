@@ -15,7 +15,6 @@ function ResultPanel() {
 
     useEffect(() => {
         if(timerStatus == "payout") {
-            console.log('ResultPanel')
             fetchUserResult();
         }
 
@@ -25,6 +24,7 @@ function ResultPanel() {
 
     const fetchUserResult = async () => {
         try {
+            
             await HLBackendV1Api
             .post(`${process.env.BACKEND_API_URL}/betting-management/get-user-result`, { _id: currentRound.id })
                 .then((response) => {
@@ -51,9 +51,9 @@ function ResultPanel() {
             <span>WINNER</span>
             <CountUp start={0} end={totalEarningsRef.current} duration={0.8}/>
         </div> */}
-        { timerStatus == "betting_open" || timerStatus == "payout" && totalEarningsRef.current > 0 &&
+        { timerStatus == "betting_open" || timerStatus == "payout"  && totalEarningsRef.current > 0 &&
             <div className="absolute pt-30 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-48 text-amber-400 rounded-lg shadow-lg flex items-center justify-center text-center font-bold text-lg animate-on-load">
-                <span class="relative z-10 text-4xl font-extrabold">
+                <span class="relative z-10 text-4xl font-extrabold text-shadow-lg/30">
                     ₩ <CountUp start={0} end={totalEarningsRef.current} duration={0.8}/>
                 </span>
                 <img className="w-80 h-80 object-contain absolute rounded-full" src={Winner}/>

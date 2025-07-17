@@ -68,4 +68,40 @@
       */
 }
 
+/* app.jsx > timer status */
+@keyframes bounceAndSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-100px); /* Start 100px above and invisible */
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(10px); /* Overshoot slightly below final position */
+  }
+  70% {
+    transform: translateY(-5px); /* Bounce back up slightly */
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0); /* Settle at final position */
+  }
+}
 
+@keyframes slideLeft1 {
+  0% {
+      opacity: 1; /* Stay fully opaque */
+      transform: translateX(2000px); /* Start at current position */
+  }
+  100% {
+      opacity: 1; /* Stay fully opaque as it slides out */
+      transform: translateX(-500px); /* Slide far left */
+  }
+}
+
+.animate-sequence {
+  /* First animation: bounceAndSlideIn (duration 1s, delay 0.2s) */
+  /* Second animation: slideLeft (duration 0.8s, starts after 1s + 0.2s = 1.2s, plus a small gap) */
+  animation:
+    bounceAndSlideIn 1s ease-out forwards;
+     
+}

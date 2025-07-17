@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 function BettingForm() {
   const { count, betType, userPlaceBet, authUser, currentRound, timerStatus } = useStore();
   const [bettingAmount, setBettingAmount] = useState('');
+  const [isSubmittable, setIsSubmittable] = useState(true);
 
   const customToastClasses = `
   .custom-toast-background {
@@ -55,6 +56,7 @@ function BettingForm() {
   };
 
   const submitBet = async (type) => {
+    setIsSubmittable(false)
     if(timerStatus !== "betting_open") {
       Swal.fire({
         title: "",
@@ -66,6 +68,7 @@ function BettingForm() {
           Swal.getHtmlContainer().style.color = '#b6c2cf';
         },
       });
+      setIsSubmittable(true)
       return;
     }
 
@@ -99,9 +102,13 @@ function BettingForm() {
         //   },
         // });
 
-        (!isError) && setBettingAmount('');  
+        (!isError) && setBettingAmount('');
 
-        toast.success('Bet has been placed');
+        if(response) {
+          console.table(response.data)
+          setIsSubmittable(true)
+          toast.success('Bet has been placed');
+        }
 
       })
       .catch((error) => {
@@ -117,11 +124,14 @@ function BettingForm() {
           },
         });
         console.log(error);
+      }).finally(() => {
+        setIsSubmittable(true);
+        setBettingAmount('');
       });
   };
 
   return (
-    <div className="flex flex-col gap-2 bg-slate-800 border border-solid border-slate-700 rounded-lg p-5 fill-white drop-shadow-xl/50 font-xs overflow-x-scroll">
+    <div className={"flex flex-col gap-2 bg-slate-800 border border-solid border-slate-700 rounded-lg p-5 fill-white drop-shadow-xl/50 font-xs overflow-x-scroll "}>
       <style>{customToastClasses}</style>
       <div className="gap-2 rounded-md flex flex-row max-w-full text-sm max-sm:flex-col sm:max-lg:flex-col">
         <div className="input-cont w-1/2 flex flex-col text-slate-400 font-medium max-sm:w-full">
@@ -233,7 +243,7 @@ function BettingForm() {
       </div>
       <div className="flex flex-row w-full gap-1">
         <button
-          className="group btn btn-success w-1/2 hover:text-white flex flex-row items-center justify-center gap-2 hover:underline"
+          className={"group btn btn-success w-1/2 hover:text-white flex flex-row items-center justify-center gap-2 hover:underline "} disabled={!isSubmittable || timerStatus !== "betting_open" && true }
           onClick={() => submitBet('UP')}
         >
           <svg
@@ -254,7 +264,7 @@ function BettingForm() {
         </button>
 
         <button
-          className="group btn btn-secondary w-1/2 hover:text-white flex flex-row items-center justify-center gap-2 hover:underline"
+          className={"group btn btn-secondary w-1/2 hover:text-white flex flex-row items-center justify-center gap-2 hover:underline"} disabled={!isSubmittable || timerStatus !== "betting_open" && true }
           onClick={() => submitBet('DOWN')}
         >
           <svg

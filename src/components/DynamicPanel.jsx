@@ -10,6 +10,8 @@ function DynamicPanel() {
   const winningDown = useRef(0);
   const totalUpBetsRef = useRef(0);
   const totalDownBetsRef = useRef(0);
+  const currentUpBetsCountRef = useRef(0);
+  const currentDownBetsCountRef = useRef(0);
   
   useEffect(() => {
     // console.log(`up bets: ${currentUpBets}`)
@@ -34,6 +36,9 @@ function DynamicPanel() {
       assumedDownWinnings = totalUpBets * downRate
       winningDown.current = totalUpBets * downRate;
       totalDownBetsRef.current = +totalDownBets;
+
+      currentUpBetsCountRef.current = currentUpBets.length;
+      currentDownBetsCountRef.current = currentDownBets.length;
     }
   }, [timerStatus]);
 
@@ -123,14 +128,14 @@ function DynamicPanel() {
         <div className={"flex flex-row betListing-container "+(timerStatus !== "payout" ? "transition-all delay-1000 duration-1000 ease-linear opacity-100 h-[50%] ": "transition-all delay-1000 duration-1000 ease-linear opacity-0 h-[0.1%] ") }>
           <div className={"w-1/2 upBets flex flex-col gap-1.5 p-1 "}>
             { (timerStatus !== "payout") && currentUpBets.map(upbet => (
-              <span className={"animate-slide-in-right p-1 rounded-lg bg-gradient-to-r from-emerald-800 from-10% to-80% text-xs font-medium"}>{ upbet.user_name} ₩&nbsp;<CountUp end={ upbet.total_bets }/></span>
+              <span key={upbet.id} className={"animate-slide-in-right p-1 rounded-lg bg-gradient-to-r from-emerald-800 from-10% to-80% text-xs font-medium"}>{ upbet.user_name} ₩&nbsp;<CountUp end={ upbet.total_bets }/></span>
             ))}
             { timerStatus == "payout" && <h1 className={"text-2xl capitalize font-extrabold text-green-400 tracking-widest text-center"}>{(resultsData.result == "up") ? "WINNER": "LOSER"}</h1>}
           </div>
 
           <div className={"w-1/2 upBets flex flex-col gap-1 p-1"}>
             { (timerStatus !== "payout") && currentDownBets.map(downbet => (
-              <span className={"animate-slide-in-left p-1 rounded-lg bg-gradient-to-r from-pink-800 from-10% to-80% text-xs font-medium"}>{ downbet.user_name} ₩&nbsp;<CountUp end={ downbet.total_bets }/> </span>
+              <span key={downbet.id} className={"animate-slide-in-left p-1 rounded-lg bg-gradient-to-r from-pink-800 from-10% to-80% text-xs font-medium"}>{ downbet.user_name} ₩&nbsp;<CountUp end={ downbet.total_bets }/> </span>
             ))}
             { timerStatus == "payout" && <h1 className={"text-2xl capitalize font-extrabold text-pink-500 tracking-widest text-center"}>{(resultsData.result == "down") ? "WINNER": "LOSER"}</h1>}
           </div>
@@ -144,17 +149,17 @@ function DynamicPanel() {
             }`}
           >
             {timerStatus === "payout" && resultsData && (
-              <div className="">
+              <div className="text-shadow-lg/30">
                 {resultsData.result === "up" ? (
                   <div className="text-green-400 tracking-widest text-center flex flex-col gap-3">
                     {/* TODO // Players count */}
-                    <span>1</span>
+                    <span>{ currentUpBetsCountRef.current }</span>
                     <span>UP</span>
                     <span><CountUp delay={2} duration={0.8} end={ winningUp.current } /></span>
                   </div>
                 ) : (
                   <div className="text-pink-500 tracking-widest text-center flex flex-col justify-center align-middle">
-                    <span>1</span>
+                    <span>{ currentDownBetsCountRef.current }</span>
                     <span>DOWN</span>
                     <span><CountUp delay={2} duration={0.8} end={ winningDown.current } /></span> 
                   </div>

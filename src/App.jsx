@@ -74,6 +74,8 @@ const App = () => {
     if(timerStatus === "payout") {
       setUpWager("100");
       setDownWager("100");
+      setUpTotalBets([]);
+      setDownTotalBets([]);
    
     }
   }, [timerStatus]);
@@ -117,7 +119,7 @@ const App = () => {
       
       {isLoading ? (
         <div className="flex justify-center items-center h-[400px]">
-          <img class="h-40 w-96 object-contain" src={Loader} />
+          <img className="h-40 w-96 object-contain" src={Loader} />
           {/* <div className="loading loading-dots w-20 text-purple-600"></div> */}
         </div>
       ) : (
@@ -125,13 +127,13 @@ const App = () => {
           fallback={
             <div className="flex justify-center items-center h-[400px]">
               
-              <img class="h-40 w-96 object-contain" src={Loader} />
+              <img className="h-40 w-96 object-contain" src={Loader} />
               {/* <div className="loading loading-dots w-20 text-purple-600"></div> */}
             </div>
           }
         >
-          {(isAuthUser) && <div className="flex flex-col gap-1 max-h-[100%] max-w-[1680px] mx-auto">
-            <div className="w-full"> { timerStatus }
+          {(isAuthUser) && <div className="flex flex-col gap-1 max-h-[100%] max-w-[1680px] mx-auto max-sm:bg-pink-600 sm:max-lg:bg-cyan-400 lg:max-xl:bg-yellow-300 xl:max-2xl:bg-indigo-800 2xl:bg-stone-300">
+            <div className="w-full">
               <div className="tradingview-widget-container text-red-300">
                 {/* <SingleTicker
                   colorTheme="dark"
@@ -153,25 +155,75 @@ const App = () => {
             </div>
             <div className="flex flex-row gap-1">
               <div className="w-2/3 flex flex-col border border-solid border-slate-700 rounded-tl-lg rounded-bl-lg h-full max-sm:w-full sm:w-full">
-                <div className="flex flex-col w-full p-5 bg-transparent h-2/5">
+                <div className="flex flex-col w-full p-2 bg-transparent h-2/5 ">
                   <div className="w-full">
-                    <div className="text-center p-2 gap-2">
-                      <span className={"text-4xl text-success font-extrabold px-3"}> { (upWager !== 0) ? upWager: 100 }%</span>
-                      <GameTimer />
-                      <span className={"text-4xl text-secondary font-extrabold px-3"}>{ (downWager !== 0) ? downWager: 100 }%</span>
+                    <div className="flex flex-row text-center p-2 gap-2 bg-slate-800">
+                      <div className={"w-full left-pane flex flex-col text-left font-light text-sm"}>
+                        <span className={"up-inv"}>Your Investment</span>
+                        <span className={"up-inv-val font-extrabold text-success"}>₩ 69</span>
+                        <span className={"up-poten-ret"}>Potential Return</span>
+                        <span className={"up-poten-val font-extrabold text-success"}>₩ 69.9</span>
+                      </div>
+
+                      <div className={"flex flex-row w-full center-pane"}>
+                        <div className={"flex flex-col up-wager px-3 w-full place-items-center gap-2"}>
+                          <span className='rounded-full bg-gradient-to-b from-green-500/20 to-transparent text-success text-xs font-medium w-1/2 p-0'>Up wins</span>
+                          <div className="upwager-cont text-4xl text-success font-extrabold">
+                            { (upWager !== 0) ? upWager: 100 }%
+                          </div>
+                        </div>
+                        <div className={"w-full"}><GameTimer /></div>
+                        {/* <div className={"text-4xl text-secondary font-extrabold px-3 w-full"}>
+                          { (downWager !== 0) ? downWager: 100 }%
+                        </div> */}
+                        <div className={"flex flex-col down-wager px-3 w-full place-items-center gap-2"}>
+                          <span className='rounded-full bg-gradient-to-b from-pink-500/20 to-transparent text-secondary text-xs font-medium w-3/5 p-0 mx-0'>Down wins</span>
+                          <div className="downwager-cont text-4xl text-secondary font-extrabold">
+                            { (downWager !== 0) ? downWager: 100 }%
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className={"w-full right-pane flex flex-col text-right font-light text-sm"}>
+                        <span className={"down-inv"}>Your Investment</span>
+                        <span className={"down-inv-val font-extrabold text-secondary"}>₩ 69</span>
+                        <span className={"down-poten-ret"}>Potential Return</span>
+                        <span className={"down-poten-val font-extrabold text-secondary"}>₩ 69.6</span>
+                      </div>
+
                     </div>
                   </div>
-                  <div className="flex flex-row w-full">
+                  {/* <div className="flex flex-row w-full">
                     <div className="bg-success w-full">.</div>
                     <div className="bg-secondary w-full end-1">.</div>
-                  </div>
+                  </div> */}
                   
                 </div>
 
                 
                 <div className="relative">
                   <div className={"w-full bg-blend-darken absolute z-20 "}><ResultPanel /></div>
-                  <div className='w-full'>
+                  <div className="h-full status-cont flex flex-col bg-slate-800 pl-5 pt-5">
+                    { timerStatus == "betting_open" && 
+                      <>
+                        <span className={"animate-sequence text-lg font-semibold"}>Round in Progress</span>
+                        <span className={"animate-sequence text-md font-semibold"}>Place your trade</span>
+                      </>
+                    }
+                    { timerStatus == "draw" && 
+                      <>
+                        <span className={"animate-sequence text-lg font-semibold"}>No more orders!</span>
+                        <span className={"animate-sequence text-md font-semibold"}>Wait for next round</span>
+                      </>
+                    }
+                    { timerStatus == "payout" && 
+                      <>
+                        <span className={"animate-sequence text-lg font-semibold"}>Money Distributed</span>
+                        <span className={"animate-sequence text-md font-semibold"}>&nbsp;</span>
+                      </>
+                    }
+                  </div>
+                  <div className="w-full">
                     <OptionsChart />
                     {/* <BBBaselineChart height={300} /> */}
                   </div>
@@ -194,7 +246,7 @@ const App = () => {
             </footer>
           </div>}
           {(!isAuthUser)&& <div className="h-full w-full">
-            <img class="object-contain mx-auto" src={AuthError} />
+            <img className="object-contain mx-auto" src={AuthError} />
           </div>}
         </Suspense>
       )}
