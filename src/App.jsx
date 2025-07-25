@@ -16,6 +16,8 @@ import OptionsChart from './components/OptionsChart';
 import HLBackendV1 from '../src/utils/socket/HL_backend_v1';
 import CountUp from 'react-countup';
 import ResultPanel from './components/ResultPanel';
+import DrawHistory from './components/DrawHistory';
+import UserBetsDetails from './components/UserBetsDetails';
 
 // import { SingleTicker, TickerTape, AdvancedRealTimeChart, Ticker, SymbolInfo   } from "react-ts-tradingview-widgets";
 
@@ -112,7 +114,7 @@ const App = () => {
   };
 
   return (
-    <div className="h-auto w-full bg-gray-900 p-6 text-gray-100 font-sans drop-shadow-xl/50 max-sm:w-dvw">
+    <div className="h-auto w-full bg-gray-900 p-0 text-gray-100 font-sans drop-shadow-xl/50">
       {/* <h1 className="text-2xl font-bold text-cyan-400 mb-4 hover:text-cyan-300 transition-colors duration-300">
         KBCGAME Trading Dashboard
       </h1> */}
@@ -229,14 +231,27 @@ const App = () => {
                   </div>
                 </div>
 
-                {/* Dynamic panel xs,sm layout */}
-                <div className="w-full bg-slate-900 h-1/4 max-sm:visible sm:max-lg:visible lg:max-xl:visible xl:max-2xl:hidden 2xl:hidden max-sm:bg-pink-600 sm:max-lg:bg-cyan-400 lg:max-xl:bg-yellow-300 xl:max-2xl:bg-indigo-800 2xl:bg-stone-300">
-                  <DynamicPanel />
+                {/* Historical Data and Game Details Container */}
+                <div className="bg-slate-900 w-full p-5 max-sm:px-0 max-sm:p-1">
+                    <div className="flex flex-row justify-between items-center w-full bg-slate-800 h-16 text-black border border-solid border-slate-700 rounded-lg drop-shadow-xl/50">
+                      <div className="flex-1 text-left">
+                        <UserBetsDetails />
+                      </div>
+                      
+                      <div className="flex-1 overflow-x-hidden">
+                        <DrawHistory />
+                      </div>
+                    </div>
                 </div>
 
                 {/* <AdvancedRealTimeChart theme="dark" height={500} style="2" interval="1" symbol='btcusdt'></AdvancedRealTimeChart> */}
-                <div className="w-full p-5 bg-slate-900 h-1/4">
+                <div className="w-full p-5 bg-slate-900 h-1/4 max-sm:p-0">
                   <BettingForm />
+                </div>
+
+                {/* Dynamic panel xs,sm layout */}
+                <div className="w-full bg-slate-900 h-1/4 max-sm:visible sm:max-lg:visible lg:max-xl:visible xl:max-2xl:hidden 2xl:hidden">
+                  <DynamicPanel />
                 </div>
               </div>
 
@@ -245,7 +260,7 @@ const App = () => {
                 <DynamicPanel />
               </div>
             </div>
-            <div className="bg-slate-900 border border-solid border-slate-700 rounded-b-lg p-6 flex justify-between overflow-auto min-h-[400px]">
+            <div className="bg-slate-900 border border-solid border-slate-700 rounded-b-lg p-6 flex justify-between overflow-auto min-h-[400px] max-sm:p-0">
               <HistoricalTradesLeaderBoardPanel />
             </div>
             <footer>

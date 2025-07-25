@@ -190,49 +190,49 @@ function BettingForm() {
           <span className="p-1 text-shadow-lg">How it works?</span>
           <div className="btn-multi w-full flex flex-row gap-1 overflow-x-auto">
             <button
-              className="btn bg-gradient-to-b from-red-500 to-orange-500 hover:underline hover:shadow-md hover:animate-pulse shadow-orange-500/50 btn-uniform max-sm:btn-lg sm:max-lg:btn-lg"
+              className="btn bg-gradient-to-b from-red-500 to-orange-500 hover:underline hover:shadow-md hover:animate-pulse shadow-orange-500/50 btn-uniform rounded-xl max-sm:btn-lg sm:max-lg:btn-lg"
               value="10000"
               onClick={computeBettingAmountButton}
             >
               1만
             </button>
             <button
-              className="btn bg-gradient-to-b from-red-500 to-orange-500 hover:underline hover:shadow-md hover:animate-pulse shadow-orange-500/50 btn-uniform max-sm:btn-lg sm:max-lg:btn-lg"
+              className="btn bg-gradient-to-b from-red-500 to-orange-500 hover:underline hover:shadow-md hover:animate-pulse shadow-orange-500/50 btn-uniform rounded-xl max-sm:btn-lg sm:max-lg:btn-lg"
               value="30000"
               onClick={computeBettingAmountButton}
             >
               3만
             </button>
             <button
-              className="btn bg-gradient-to-b from-red-500 to-orange-500 hover:underline hover:shadow-md hover:animate-pulse shadow-orange-500/50 btn-uniform max-sm:btn-lg sm:max-lg:btn-lg"
+              className="btn bg-gradient-to-b from-red-500 to-orange-500 hover:underline hover:shadow-md hover:animate-pulse shadow-orange-500/50 btn-uniform rounded-xl max-sm:btn-lg sm:max-lg:btn-lg"
               value="50000"
               onClick={computeBettingAmountButton}
             >
               5만
             </button>
             <button
-              className="btn bg-gradient-to-b from-red-500 to-orange-500 hover:underline hover:shadow-md hover:animate-pulse shadow-orange-500/50 btn-uniform max-sm:btn-lg sm:max-lg:btn-lg"
+              className="btn bg-gradient-to-b from-red-500 to-orange-500 hover:underline hover:shadow-md hover:animate-pulse shadow-orange-500/50 btn-uniform rounded-xl max-sm:btn-lg sm:max-lg:btn-lg"
               value="100000"
               onClick={computeBettingAmountButton}
             >
               10만
             </button>
             <button
-              className="btn bg-gradient-to-b from-red-500 to-orange-500 hover:underline hover:shadow-md hover:animate-pulse shadow-orange-500/50 btn-uniform max-sm:btn-lg sm:max-lg:btn-lg"
+              className="btn bg-gradient-to-b from-red-500 to-orange-500 hover:underline hover:shadow-md hover:animate-pulse shadow-orange-500/50 btn-uniform rounded-xl max-sm:btn-lg sm:max-lg:btn-lg"
               value="300000"
               onClick={computeBettingAmountButton}
             >
               30만
             </button>
             <button
-              className="btn bg-gradient-to-b from-red-500 to-orange-500 hover:underline hover:shadow-md hover:animate-pulse shadow-orange-500/50 btn-uniform max-sm:btn-lg sm:max-lg:btn-lg"
+              className="btn bg-gradient-to-b from-red-500 to-orange-500 hover:underline hover:shadow-md hover:animate-pulse shadow-orange-500/50 btn-uniform rounded-xl max-sm:btn-lg sm:max-lg:btn-lg"
               value="500000"
               onClick={computeBettingAmountButton}
             >
               50만
             </button>
             <button
-              className="btn bg-gradient-to-b from-red-500 to-orange-500 hover:underline hover:shadow-md hover:animate-pulse shadow-orange-500/50 btn-uniform max-sm:btn-lg sm:max-lg:btn-lg"
+              className="btn bg-gradient-to-b from-red-500 to-orange-500 hover:underline hover:shadow-md hover:animate-pulse shadow-orange-500/50 btn-uniform rounded-xl max-sm:btn-lg sm:max-lg:btn-lg"
               value="1000000"
               onClick={computeBettingAmountButton}
             >

@@ -32,13 +32,31 @@ const OptionsChart = ({ height = 400, className = '' }) => {
       try {
         console.log('Creating chart with ref:', chartRef.current);
         const chartOptions = {
-            layout: {
-              background: { color: '#1D293D' }, 
-              textColor: '#90A1B9',
-              fontSize: 15,
-              attributionLogo: false
-            },
-            grid: { vertLines: { color: '#25293a' }, horzLines: { color: '#2d324d' } },
+          layout: {
+            background: { color: '#1D293D' }, 
+            textColor: '#90A1B9',
+            fontSize: 15,
+            attributionLogo: false
+          },
+          handleScroll: false,
+          handleScale: false,
+          grid: { vertLines: { color: '#25293a' }, horzLines: { color: '#2d324d' } },
+          timeScale: {
+            timeVisible: false,
+            //fixRightEdge: true,
+            //fixLeftEdge: true,
+            //autoScale: false,
+            minBarSpacing: 10,
+            //borderVisible: true,
+            rightOffset: 15,
+            //barSpacing: -1,
+            //minimumHeight: 100,
+            //ticksVisible: false,
+            visible: false,
+            //visibleRange:1000
+            ignoreWhitespaceIndices: true,
+            //shiftVisibleRangeOnNewBar: false,
+          },
         };
         chartInstance.current = createOptionsChart(chartRef.current, chartOptions);
 
@@ -180,7 +198,7 @@ const OptionsChart = ({ height = 400, className = '' }) => {
         lastUpdateTime.current = now;
         setChartData(prevData => {
           const newData = [...prevData, newPoint].sort((a, b) => a.time - b.time);
-          const limitedData = newData.slice(-300); // Increased to 200 ticks
+          const limitedData = newData.slice(0); // Increased to 200 ticks
           //const limitedData = newData;
 
           const uniqueLimitedData = [...new Map(limitedData.map(item => [item.time, item])).values()].sort((a, b) => a.time - b.time);

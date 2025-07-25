@@ -105,3 +105,39 @@
     bounceAndSlideIn 1s ease-out forwards;
      
 }
+
+
+.vavascrollbar::-webkit-scrollbar {
+  height: 5px;
+  width: 5px;
+  cursor: pointer;
+}
+.vavascrollbar::-webkit-scrollbar-track {
+  border-radius: 14px;
+  background-color: #dfe9eb6a;
+  border: 1px outset #ffffff81;
+  cursor: pointer;
+}
+
+.vavascrollbar::-webkit-scrollbar-track:hover {
+  background-color: #f0fbfd59;
+}
+
+.vavascrollbar::-webkit-scrollbar-track:active {
+  background-color: #F2FCFF;
+}
+
+.vavascrollbar::-webkit-scrollbar-thumb {
+  border-radius: 2px;
+  background-color: #eda909;
+  border: 1px outset #ffffff7e;
+}
+
+.vavascrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #eda909;
+}
+
+.vavascrollbar::-webkit-scrollbar-thumb:active {
+  background-color: #eda909;
+  
+}
