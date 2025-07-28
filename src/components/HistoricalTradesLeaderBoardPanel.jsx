@@ -1,7 +1,8 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
+import OpenPositionTable from './OpenPositionTable';
 
 function HistoricalTradesLeaderBoardPanel() {
-  const [activeTab, setActiveTab] = useState('history');
+  const [activeTab, setActiveTab] = useState('positions');
 
   return (
     <div className="w-full flex flex-col bg-slate-800 border border-solid border-slate-700 rounded-lg p-5 fill-white drop-shadow-xl/50 overflow-x-scroll">
@@ -42,7 +43,9 @@ function HistoricalTradesLeaderBoardPanel() {
       {/* Tab Content */}
       <div className="p-10 bg-transparent">
         {activeTab === 'positions' && (
-          <div className="text-white">Positions content</div>
+          <div className="text-white">
+            <OpenPositionTable />
+          </div>
         )}
         {activeTab === 'history' && (
           <div className="text-white">History content</div>
