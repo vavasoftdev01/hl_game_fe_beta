@@ -41,9 +41,9 @@ function HistoricalTradesLeaderBoardPanel() {
       </div>
 
       {/* Tab Content */}
-      <div className="p-10 bg-transparent">
+      <div className="pt-2 bg-transparent">
         {activeTab === 'positions' && (
-          <div className="text-white">
+          <div className="text-white w-full">
             <OpenPositionTable />
           </div>
         )}

@@ -250,7 +250,7 @@ const App = () => {
                 </div>
 
                 {/* Dynamic panel xs,sm layout */}
-                <div className="w-full bg-slate-900 h-1/4 max-sm:visible sm:max-lg:visible lg:max-xl:visible xl:max-2xl:hidden 2xl:hidden">
+                <div className="w-full bg-slate-900 h-1/4 max-sm:visible sm:max-lg:visible lg:max-xl:visible xl:max-2xl:hidden 2xl:hidden hidden">
                   <DynamicPanel />
                 </div>
               </div>
