@@ -80,7 +80,7 @@ function OpenPositionTable() {
                                 { bet.status }
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm capitalize max-sm:hidden">
-                                { bet.ud_game.draw_open_price }
+                                { (bet.ud_game.draw_open_price) ? bet.ud_game.draw_open_price: "🚧🚧🚧" }
                             </td>
                         </tr>
                         ))}

@@ -11,7 +11,7 @@ function HistoricalPositionTable() {
 
     const getHistoricalBetsData = async() => {
         try {
-            await HLBackendV1Api.get(`${process.env.BACKEND_API_URL}/betting-management/user-transaction-history?status=all&skip=0&take=5`)
+            await HLBackendV1Api.get(`${process.env.BACKEND_API_URL}/betting-management/user-transaction-history?status=all&skip=0&take=20`)
             .then((response) => { 
                 setHistoricalBets(response.data)
             });
@@ -65,11 +65,11 @@ function HistoricalPositionTable() {
                     </thead>
                     <tbody className="bg-gray-800 divide-y divide-gray-700">
                         {historicalBets.map((bet) => (
-                        <tr key={bet.id} className={"hover:animate-pulse hover:cursor-pointer transition duration-150 ease-in-out text-gray-300 tracking-wide font-medium text-xs "+(bet.status == "win" ? "bg-gradient-to-r from-emerald-600 from-1% to-10%" : "bg-gradient-to-r from-pink-600 from-1% to-10%") }>
+                        <tr key={bet.id} className={"hover:animate-pulse hover:cursor-pointer transition duration-150 ease-in-out text-gray-300 tracking-wide font-medium text-xs "+(bet.status == "win" ? "bg-gradient-to-r from-emerald-600 from-1% to-10%": bet.status == "loss" ? "bg-gradient-to-r from-pink-600 from-1% to-10%": "bg-gradient-to-r from-amber-900 from-1% to-10%") }>
                             {/* <td className="px-6 py-4 whitespace-nowrap">
                                 { bet.id }
                             </td> */}
-                            <td className={"px-5 py-2 whitespace-nowrap text-sm capitalize "+(bet.status == "win" ? "text-green-300": "text-pink-300")}>
+                            <td className={"px-5 py-2 whitespace-nowrap text-sm capitalize "+(bet.status == "win" ? "text-green-300": bet.status == "loss" ? "text-pink-300": "text-amber-300")}>
                                 { bet.status }
                             </td>
                                 <td className={"px-5 py-2 whitespace-nowrap capitalize "+(bet.user_bets == "up" ? "text-green-300": "text-pink-300")}>
@@ -91,8 +91,8 @@ function HistoricalPositionTable() {
                             <td className={"px-5 py-2 whitespace-nowrap text-sm "+(bet.status == "win" ? "text-green-300": "text-pink-300")}>
                                 { bet.rate }&nbsp;%
                             </td>
-                            <td className={"px-6 py-4 whitespace-nowrap text-sm "+(bet.status == "win" ? "text-green-300": "text-pink-300")}>
-                                ₩&nbsp;{ Math.round(+bet.pnl).toLocaleString() }
+                            <td className={"px-6 py-4 whitespace-nowrap text-sm "+(bet.status == "win" ? "text-green-300": bet.status == "loss" ? "text-pink-300": "text-amber-300")}>
+                                ₩&nbsp;{ (bet.status == "win") ? Math.round(+bet.pnl).toLocaleString(): (bet.status == "loss") ? '-'+(+bet.amount).toLocaleString(): 0 }
                             </td>
                         </tr>
                         ))}
