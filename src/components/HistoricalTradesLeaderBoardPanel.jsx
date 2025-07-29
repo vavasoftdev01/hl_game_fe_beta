@@ -1,5 +1,6 @@
 import { React, useState, useEffect } from 'react';
 import OpenPositionTable from './OpenPositionTable';
+import HistoricalPositionTable from './HistoricalPositionTable';
 
 function HistoricalTradesLeaderBoardPanel() {
   const [activeTab, setActiveTab] = useState('positions');
@@ -48,7 +49,9 @@ function HistoricalTradesLeaderBoardPanel() {
           </div>
         )}
         {activeTab === 'history' && (
-          <div className="text-white">History content</div>
+          <div className="text-white w-full">
+            <HistoricalPositionTable /> 
+          </div>
         )}
         {activeTab === 'leaderboard' && (
           <div className="text-white">LeaderBoard content</div>
