@@ -245,7 +245,7 @@ const App = () => {
                 </div>
 
                 {/* <AdvancedRealTimeChart theme="dark" height={500} style="2" interval="1" symbol='btcusdt'></AdvancedRealTimeChart> */}
-                <div className="w-full p-5 bg-slate-900 h-1/4 max-sm:p-0">
+                <div className="w-full p-5 bg-slate-900 h-1/4 max-sm:p-0 max-sm:hidden">
                   <BettingForm />
                 </div>
 
