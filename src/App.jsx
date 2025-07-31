@@ -168,19 +168,19 @@ const App = () => {
                       </div>
 
                       <div className={"flex flex-row w-full center-pane"}>
-                        <div className={"flex flex-col up-wager px-3 w-full place-items-center gap-2"}>
+                        <div className={"flex-1 flex-col up-wager px-3 w-full place-items-center gap-2 "}>
                           <span className='rounded-full bg-gradient-to-b from-green-500/20 to-transparent text-success text-xs font-medium w-1/2 p-0'>Up wins</span>
-                          <div className="upwager-cont text-4xl text-success font-extrabold">
+                          <div className="upwager-cont text-4xl text-success font-extrabold max-sm:text-3xl">
                             { (upWager !== 0) ? upWager: 100 }%
                           </div>
                         </div>
-                        <div className={"w-full"}><GameTimer /></div>
+                        <div className={"flex-1 w-full"}><GameTimer /></div>
                         {/* <div className={"text-4xl text-secondary font-extrabold px-3 w-full"}>
                           { (downWager !== 0) ? downWager: 100 }%
                         </div> */}
-                        <div className={"flex flex-col down-wager px-3 w-full place-items-center gap-2 "}>
+                        <div className={"flex-1 flex-col down-wager px-3 w-full place-items-center gap-2"}>
                           <span className='rounded-full bg-gradient-to-b from-pink-500/20 to-transparent text-secondary text-xs font-medium w-full p-0 mx-0'>Down wins</span>
-                          <div className="downwager-cont text-4xl text-secondary font-extrabold">
+                          <div className="downwager-cont text-4xl text-secondary font-extrabold max-sm:text-3xl">
                             { (downWager !== 0) ? downWager: 100 }%
                           </div>
                         </div>
