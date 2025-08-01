@@ -116,7 +116,7 @@ function HistoricalPositionTable() {
     
     return <>
         { (historicalBets && historicalBets.length > 0) && 
-        <div className="w-full bg-gray-800 rounded-lg shadow-xl overflow-hidden h-full">  
+        <div className="w-full bg-gray-800 rounded-lg shadow-xl overflow-auto h-full">  
             <div className="overflow-x-scroll">
                 
                 <div className="w-full controls-container p-2 flex flex-row gap-2">

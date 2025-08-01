@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 import HLBackendV1Api from '../utils/http/api';
 import moment from 'moment'; 
-import DataTableNoData from "./DataTableNoData";
+import DataTableNoData from './DataTableNoData';
+import { useStore } from './../states/store';
 
 function OpenPositionTable() {
 
     const [userBets, setUserBets] = useState([]);
+     const { timerStatus} = useStore();
 
     const getPendingUserBets = async() => {
         try {
@@ -20,16 +22,19 @@ function OpenPositionTable() {
     }
 
   useEffect(() => {
-
-    let intId = setInterval(() => {
-      getPendingUserBets();
-    },2000)
+    let intId;
+    if(timerStatus === "betting_open") {
+        intId = setInterval(() => {
+             getPendingUserBets();
+        },2000)
+    }
+    
     
 
     return () => {
         clearInterval(intId)
     }
-  },[])
+  },[timerStatus])
     
 
     return <>
